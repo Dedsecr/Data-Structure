@@ -1,9 +1,0 @@
-*
-!*.cpp
-!*.md
-!*.txt
-!*.in
-!*.out
-!*.pdf
-!*.zip
-!.gitignore
