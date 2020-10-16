@@ -312,10 +312,15 @@ void Test_GenerateNewMapRandomly(int n, int m)
     FindAll(Map);
     puts("******************************");
 }
+/*
 int main()
 {
+    int n, m;
+    freopen("Homework2_In.txt", "r", stdin);
     freopen("Homework2_Out.txt", "w", stdout);
-    //Test_GenerateNewMapManually(4, 4);
-    Test_GenerateNewMapRandomly(4, 4);
+    cin >> n >> m;
+    Test_GenerateNewMapManually(n, m);
+    Test_GenerateNewMapRandomly(n, m);
     return 0;
 }
+*/
