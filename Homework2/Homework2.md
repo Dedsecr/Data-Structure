@@ -21,7 +21,6 @@ struct MAP
 1. 设计一个迷宫及其障碍的表示方式，并能随机或手动生成迷宫。
 `GenerateNewMapRandomly(int n, int m)` 随机生成一个 $n\times m$ 的迷宫, `0` 与 `1` 比例为 $4:1$ 。
 `GenerateNewMapManually(int n, int m)` 手动生成一个 $n\times m$ 的迷宫。
-
 2. 设计并实现一个非递归的算法，输出从入口到出口的一条路径（如存在）。
 `bool FindWithoutRecursion(MAP &Map)` 非递归地在迷宫 `Map` 中找到一条路径，若有则返回 `1` ，否则返回 `0` 。
 3. 设计并实现一个递归的算法，找出从入口到出口的一条路径（如存在）。
@@ -32,6 +31,11 @@ struct MAP
 `void FindAll(MAP &Map)` 递归地在迷宫 `Map` 中找到所有简单路径。
 6. 以文件方式保存、并显示原始数据和结果。
 `freopen("Homework2_Out.txt", "w", stdout)`
+
+### 输出格式说明
+
+1. 若迷宫是随机生成的，则首先输出迷宫；若是手动输入，则不输出。
+2. 
 
 
 > 0 1 0 0 0 1 1 0 0 0 1 1 1 1 1
