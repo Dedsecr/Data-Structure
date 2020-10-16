@@ -33,7 +33,7 @@ MAP GenerateNewMapRandomly(int n,int m)
     srand(time(0));
     for (int i = 1; i <= n; ++i)
         for (int j = 1; j <= m; ++j)
-            Map.map[i][j] = (rand() % 5) > 2 ? 0 : 1, Map.Visited[i][j] = 0;
+            Map.map[i][j] = (rand() % 5) > 3 ? 0 : 1, Map.Visited[i][j] = 0;
     Map.map[1][1] = Map.map[n][m] = 0;
     return Map;
 }
@@ -201,7 +201,8 @@ void DFS_All(MAP &Map, Node x, int &Times)
 {
     if(x.x == Map.n && x.y == Map.m)
     {
-        puts("************FindAll***********");
+        if(Times == 0)
+            puts("************FindAll***********");
         PrintStack();
         Times++;
         return;
@@ -314,7 +315,7 @@ void Test_GenerateNewMapRandomly(int n, int m)
 int main()
 {
     freopen("Homework2_Out.txt", "w", stdout);
-    Test_GenerateNewMapManually(4, 4);
-    //Test_GenerateNewMapRandomly(4, 4);
+    //Test_GenerateNewMapManually(4, 4);
+    Test_GenerateNewMapRandomly(4, 4);
     return 0;
 }

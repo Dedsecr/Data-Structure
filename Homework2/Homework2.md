@@ -19,9 +19,9 @@ struct MAP
 ### 函数说明
 
 1. 设计一个迷宫及其障碍的表示方式，并能随机或手动生成迷宫。
-`GenerateNewMapRandomly(int n, int m)` 随机生成一个 $n\times m$ 的迷宫。
+`GenerateNewMapRandomly(int n, int m)` 随机生成一个 $n\times m$ 的迷宫, `0` 与 `1` 比例为 $4:1$ 。
 `GenerateNewMapManually(int n, int m)` 手动生成一个 $n\times m$ 的迷宫。
-``
+
 2. 设计并实现一个非递归的算法，输出从入口到出口的一条路径（如存在）。
 `bool FindWithoutRecursion(MAP &Map)` 非递归地在迷宫 `Map` 中找到一条路径，若有则返回 `1` ，否则返回 `0` 。
 3. 设计并实现一个递归的算法，找出从入口到出口的一条路径（如存在）。
