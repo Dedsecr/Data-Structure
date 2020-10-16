@@ -314,7 +314,7 @@ void Test_GenerateNewMapRandomly(int n, int m)
 int main()
 {
     freopen("Homework2_Out.txt", "w", stdout);
-    Test_G enerateNewMapManually(4, 4);
+    Test_GenerateNewMapManually(4, 4);
     //Test_GenerateNewMapRandomly(4, 4);
     return 0;
 }
