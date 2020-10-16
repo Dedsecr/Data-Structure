@@ -76,7 +76,7 @@ struct EleNum
 struct Ele
 {
     EleNum Elements;
-    intdw Next;
+    int Next;
     Ele(){}
     Ele(EleNum _E, int _N)
     {
