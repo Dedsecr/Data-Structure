@@ -100,6 +100,7 @@ struct Polyn
         }
     }
 };
+EleNum SortTmp[MAXN];
 int GetNewPos(Polyn polyn)
 {
     return polyn.Available[polyn.AvailableP--];
@@ -189,20 +190,30 @@ bool Cmp(const Polyn &a, const Polyn &b)
 {
     return a.Elements->Elements.expo < b.Elements->Elements.expo;
 }
+void Sort(Polyn &polyn)
+{
+    int Length = polyn.Length;
+    int P = 0;
+    for (int i = 1; i <= Length; ++i)
+    {
+        
+    }
+    //sort(polyn.Elements + 1, polyn.Elements + 1 + Length, Cmp);
+}
 Polyn Input(int Length)
 {
     Polyn Res(Length);
-    for(int i = 1; i <= Length; ++i)
+    int LastP = 0;
+    for (int i = 1; i <= Length; ++i)
     {
         int NewPos = GetNewPos(Res);
-        
-        while(!GetElements(NewPos, Res))
+        Res.Elements[LastP].Next = NewPos;
+        while (!GetElements(NewPos, Res))
         {
             puts("Wrong format!");
         }
         //scanf("%d%d",&Res.Elements->Elements.coef, &Res.Elements->Elements.expo);
     }
-    sort(Res.Elements + 1, Res.Elements + 1 + Length, Cmp);
     return Res;
 }
 Polyn Add(Polyn A, Polyn B)
