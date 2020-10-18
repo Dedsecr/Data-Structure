@@ -8,10 +8,7 @@ const int MAXN = 100;
 struct Fraction
 {
     int numerator, denominator;
-    Fraction()
-    {
-        Simplification();
-    }
+    Fraction(){}
     Fraction(int _n, int _d)
     {
         numerator = _n;
@@ -79,12 +76,16 @@ struct Fraction
         Res.Simplification();
         return Res;
     }
+    double ToDouble()
+    {
+        return numerator / denominator;
+    }
 };
 struct EleNum
 {
     Fraction coef;
     int expo;
-    EleNum() {}
+    EleNum(){}
     EleNum(Fraction _c, int _e)
     {
         coef = _c, expo = _e;
@@ -138,10 +139,9 @@ struct Polyn
     int Length, AvailableP, LastP;
     Polyn() 
     {
-        AvailableP = 0;
         Length = 0;
-        for (int i = 1; i < MAXN; ++i)
-            Available[++AvailableP] = AvailableP;
+        for (AvailableP = 1; AvailableP < MAXN; ++AvailableP)
+            Available[AvailableP] = AvailableP;
     }
     int GetNewPos()
     {
@@ -158,7 +158,7 @@ struct Polyn
         Elements[Pos].Next = 0;
     }
 };
-EleNum Tmp[MAXN * MAXN], EleNum_Zero = EleNum(0, 0);
+EleNum Tmp[MAXN * MAXN], EleNum_Zero = EleNum(Fraction(0, 1), 0);
 bool IsDigit(char x)
 {
     return x >= '0' && x <= '9';
@@ -275,6 +275,22 @@ Polyn Input(int Length)
         Sort(Res);
     }
     return Res;
+}
+void Print(Polyn &polyn)
+{
+    bool First = 1;
+    for (int Pos = polyn.Elements[0].Next; Pos; Pos = polyn.Elements[Pos].Next)
+    {
+        if(First)
+            First = 0;
+        else
+            cout << " + ";
+        
+        printf("(%d/%d)*x^(%d)", polyn.Elements[Pos].Elements.coef.numerator,
+               polyn.Elements[Pos].Elements.coef.denominator,
+               polyn.Elements[Pos].Elements.expo);
+    }
+    puts("");
 }
 Polyn Add(Polyn &A, Polyn &B)
 {
@@ -399,8 +415,31 @@ Polyn Get_Derivative_Function(Polyn &A, int k)
     }
     return Res;
 }
+double QPow(double v,int expo)
+{
+    double Res = 1, base = v;
+    while(expo)
+    {
+        if(expo & 1)
+            Res *= base;
+        base *= v;
+        expo >>= 1;
+    }
+    return Res;
+}
+double Get_Result(Polyn &A, double x)
+{
+    double Res = 0;
+    for (int Pos = A.Elements[0].Next; Pos; Pos = A.Elements[Pos].Next)
+    {
+        Res += A.Elements[Pos].Elements.coef.ToDouble() * QPow(x, A.Elements[Pos].Elements.expo);
+    }
+    return Res;
+}
 int main()
 {
-
+    int n;
+    cin >> n;
+    Polyn test = Input(n);
     return 0;
 }
