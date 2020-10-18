@@ -161,43 +161,6 @@ void Insert(Polyn &polyn, EleNum element)
     polyn.Elements[polyn.LastP].Next = Pos;
     polyn.Elements[Pos].Elements = element;
 }
-/*int GetNewLen(Polyn &A, Polyn &B)
-{
-    int Res = 0;
-    int P_A = A.Elements[0].Next, P_B = B.Elements[0].Next;
-    while(P_A && P_B)
-    {
-        if(A.Elements[P_A].Elements.expo > B.Elements[P_B].Elements.expo)
-        {
-            Res++;
-            P_A = A.Elements[P_A].Next;
-        }
-        else if(A.Elements[P_A].Elements.expo < B.Elements[P_B].Elements.expo)
-        {
-            Res++;
-            P_B = B.Elements[P_B].Next;
-        }
-        else
-        {
-            Res++;
-            P_A = A.Elements[P_A].Next;
-            P_B = B.Elements[P_B].Next;    
-        }
-    }
-    return Res;
-}
-int GetNewLen_Multiply(Polyn &A, Polyn &B)
-{
-    int TmpP = 0, Res = 1;
-    for (int P_A = A.Elements[0].Next; P_A; P_A = A.Elements[P_A].Next)
-        for (int P_B = B.Elements[0].Next; P_B; P_B = B.Elements[P_B].Next)
-            Tmp[++TmpP] = A.Elements[P_A].Elements * B.Elements[P_B].Elements;
-    sort(Tmp + 1, Tmp + 1 + TmpP, Cmp);
-    for (int i = 2; i <= TmpP; ++i)
-        if(Tmp[i].expo != Tmp[i-1].expo)
-            Res++;
-    return Res;
-}*/
 bool IsDigit(char x)
 {
     return x >= '0' && x <= '9';
