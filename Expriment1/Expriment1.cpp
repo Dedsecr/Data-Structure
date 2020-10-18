@@ -31,7 +31,7 @@ struct Fraction
     }
     void Simplification()
     {
-        int _ = gcd(numerator, denominator);
+        int _ = gcd(abs(numerator), abs(denominator));
         numerator /= _;
         denominator /= _;
     }
@@ -55,11 +55,27 @@ struct Fraction
         Res.Simplification();
         return Res;
     }
-    Fraction operator/(const Fraction _) const
+    Fraction operator / (const Fraction _) const
     {
         Fraction Res;
         Res.numerator = numerator * _.denominator;
         Res.denominator = denominator * _.numerator;
+        Res.Simplification();
+        return Res;
+    }
+    Fraction operator + (const Fraction _) const
+    {
+        Fraction Res;
+        Res.numerator = numerator * _.denominator + denominator * _.numerator;
+        Res.denominator = denominator * _.denominator;
+        Res.Simplification();
+        return Res;
+    }
+    Fraction operator - (const Fraction _) const
+    {
+        Fraction Res;
+        Res.numerator = numerator * _.denominator - denominator * _.numerator;
+        Res.denominator = denominator * _.denominator;
         Res.Simplification();
         return Res;
     }
@@ -72,6 +88,25 @@ struct EleNum
     EleNum(Fraction _c, int _e)
     {
         coef = _c, expo = _e;
+    }
+    EleNum operator + (const EleNum _) const
+    {
+        if(expo != _.expo)
+        {
+            cerr << "Error in " << __LINE__;
+            exit(-1);
+        }
+        EleNum Res;
+        Res.coef = coef + _.coef;
+        Res.expo = expo;
+        return Res;
+    }
+    EleNum operator - (const EleNum _) const
+    {
+        EleNum Res;
+        Res.coef = coef - _.coef;
+        Res.expo = expo;
+        return Res;
     }
 };
 struct Ele
@@ -281,18 +316,47 @@ Polyn Add(Polyn &A, Polyn &B)
             int NewPos = GetNewPos(Res);
             Res.Elements[LastP].Next = NewPos;
             LastP = NewPos;
+            Res.Elements[NewPos].Elements = A.Elements[P_A].Elements + B.Elements[P_B].Elements;
+            P_A = A.Elements[P_A].Next;
+            P_B = B.Elements[P_B].Next;
+        }
+    }
+}
+Polyn Minus(Polyn &A, Polyn &B)
+{
+    int _L = GetNewLen(A, B);
+    Polyn Res(_L);
+    int LastP = 0;
+    int P_A = A.Elements[0].Next, P_B = B.Elements[0].Next;
+    while(P_A && P_B)
+    {
+        if(A.Elements[P_A].Elements.expo < B.Elements[P_B].Elements.expo)
+        {
+            int NewPos = GetNewPos(Res);
+            Res.Elements[LastP].Next = NewPos;
+            LastP = NewPos;
             Res.Elements[NewPos].Elements = A.Elements[P_A].Elements;
             P_A = A.Elements[P_A].Next;
-
-            NewPos = GetNewPos(Res);
+        }
+        else if(A.Elements[P_A].Elements.expo > B.Elements[P_B].Elements.expo)
+        {
+            int NewPos = GetNewPos(Res);
             Res.Elements[LastP].Next = NewPos;
             LastP = NewPos;
             Res.Elements[NewPos].Elements = B.Elements[P_B].Elements;
             P_B = B.Elements[P_B].Next;
         }
+        else
+        {
+            int NewPos = GetNewPos(Res);
+            Res.Elements[LastP].Next = NewPos;
+            LastP = NewPos;
+            Res.Elements[NewPos].Elements = A.Elements[P_A].Elements - B.Elements[P_B].Elements;
+            P_A = A.Elements[P_A].Next;
+            P_B = B.Elements[P_B].Next;
+        }
     }
 }
-
 int main()
 {
 
