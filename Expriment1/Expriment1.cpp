@@ -186,9 +186,9 @@ bool GetElements(int Pos, Polyn &polyn)
     
     return 1;
 }
-bool Cmp(const Polyn &a, const Polyn &b)
+bool Cmp(const EleNum &a, const EleNum &b)
 {
-    return a.Elements->Elements.expo < b.Elements->Elements.expo;
+    return a.expo < b.expo;
 }
 void Sort(Polyn &polyn)
 {
@@ -196,9 +196,16 @@ void Sort(Polyn &polyn)
     int P = 0;
     for (int i = 1; i <= Length; ++i)
     {
-        
+        P = polyn.Elements[P].Next;
+        SortTmp[i] = polyn.Elements[P].Elements;
     }
-    //sort(polyn.Elements + 1, polyn.Elements + 1 + Length, Cmp);
+    sort(SortTmp + 1, SortTmp + 1 + Length, Cmp);
+    P = 0;
+    for (int i = 1; i <= Length; ++i)
+    {
+        P = polyn.Elements[P].Next;
+        polyn.Elements[P].Elements = SortTmp[i];
+    }
 }
 Polyn Input(int Length)
 {
