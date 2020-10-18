@@ -141,26 +141,24 @@ struct Polyn
         AvailableP = 0;
         Length = 0;
         for (int i = 1; i < MAXN; ++i)
-        {
             Available[++AvailableP] = AvailableP;
-        }
     }
-
+    int GetNewPos()
+    {
+        int Res = Available[AvailableP--];
+        Elements[Res].Next = 0;
+        return Res;
+    }
+    void Insert(EleNum element)
+    {
+        int Pos = GetNewPos();
+        Length++;
+        Elements[LastP].Next = Pos;
+        Elements[Pos].Elements = element;
+        Elements[Pos].Next = 0;
+    }
 };
 EleNum Tmp[MAXN * MAXN], EleNum_Zero = EleNum(0, 0);
-int GetNewPos(Polyn &polyn)
-{
-    int Res = polyn.Available[polyn.AvailableP--];
-    polyn.Elements[Res].Next = 0;
-    return Res;
-}
-void Insert(Polyn &polyn, EleNum element)
-{
-    int Pos = GetNewPos(polyn);
-    polyn.Length++;
-    polyn.Elements[polyn.LastP].Next = Pos;
-    polyn.Elements[Pos].Elements = element;
-}
 bool IsDigit(char x)
 {
     return x >= '0' && x <= '9';
@@ -240,7 +238,7 @@ bool GetElements(Polyn &polyn)
         x = x * 10 + input2[i] - '0';
     }
 
-    Insert(polyn, EleNum(Fraction(numerator, denominator), x));
+    polyn.Insert(EleNum(Fraction(numerator, denominator), x));
 
     return 1;
 }
@@ -286,29 +284,29 @@ Polyn Add(Polyn &A, Polyn &B)
     {
         if(A.Elements[P_A].Elements.expo > B.Elements[P_B].Elements.expo)
         {
-            Insert(Res, A.Elements[P_A].Elements);
+            Res.Insert(A.Elements[P_A].Elements);
             P_A = A.Elements[P_A].Next;
         }
         else if(A.Elements[P_A].Elements.expo < B.Elements[P_B].Elements.expo)
         {
-            Insert(Res, A.Elements[P_B].Elements);
+            Res.Insert(A.Elements[P_B].Elements);
             P_B = B.Elements[P_B].Next;
         }
         else
         {
-            Insert(Res, A.Elements[P_A].Elements + B.Elements[P_B].Elements);
+            Res.Insert(A.Elements[P_A].Elements + B.Elements[P_B].Elements);
             P_A = A.Elements[P_A].Next;
             P_B = B.Elements[P_B].Next;
         }
     }
     while(P_A)
     {
-        Insert(Res, A.Elements[P_A].Elements);
+        Res.Insert(A.Elements[P_A].Elements);
         P_A = A.Elements[P_A].Next;
     }
     while(P_B)
     {
-        Insert(Res, A.Elements[P_B].Elements);
+        Res.Insert(A.Elements[P_B].Elements);
         P_B = B.Elements[P_B].Next;
     }
     return Res;
@@ -321,29 +319,29 @@ Polyn Minus(Polyn &A, Polyn &B)
     {
         if(A.Elements[P_A].Elements.expo > B.Elements[P_B].Elements.expo)
         {
-            Insert(Res, A.Elements[P_A].Elements);
+            Res.Insert(A.Elements[P_A].Elements);
             P_A = A.Elements[P_A].Next;
         }
         else if(A.Elements[P_A].Elements.expo < B.Elements[P_B].Elements.expo)
         {
-            Insert(Res, EleNum_Zero - B.Elements[P_B].Elements);
+            Res.Insert(EleNum_Zero - B.Elements[P_B].Elements);
             P_B = B.Elements[P_B].Next;
         }
         else
         {
-            Insert(Res, A.Elements[P_A].Elements - B.Elements[P_B].Elements);
+            Res.Insert(A.Elements[P_A].Elements - B.Elements[P_B].Elements);
             P_A = A.Elements[P_A].Next;
             P_B = B.Elements[P_B].Next;
         }
     }
     while(P_A)
     {
-        Insert(Res, A.Elements[P_A].Elements);
+        Res.Insert(A.Elements[P_A].Elements);
         P_A = A.Elements[P_A].Next;
     }
     while(P_B)
     {
-        Insert(Res, EleNum_Zero - B.Elements[P_B].Elements);
+        Res.Insert(EleNum_Zero - B.Elements[P_B].Elements);
         P_B = B.Elements[P_B].Next;
     }
     return Res;
@@ -360,19 +358,35 @@ Polyn Multiply(Polyn &A, Polyn &B)
     for (int i = 1; i <= TmpP; ++i)
     {
         if(Tmp[i].expo != Tmp[i-1].expo)
-            Insert(Res, Tmp[i]);
+            Res.Insert(Tmp[i]);
         else
             Res.Elements[Res.LastP].Elements = Res.Elements[Res.LastP].Elements + Tmp[i];
     }
     return Res;
 }
-Polyn Divide(Polyn A, Polyn &B)
+Polyn Get_This_Quotient(EleNum A, EleNum B)
 {
+    EleNum Now = EleNum(A.coef / B.coef, A.expo - B.expo);
+    Polyn Res;
+    Res.Insert(Now);
+    return Res;
+}
+pair<Polyn, Polyn> Divide(Polyn A, Polyn &B)
+{
+    pair<Polyn, Polyn> Res;
+    Polyn Quotient;
     while(A.Elements[A.Elements[0].Next].Elements.expo >= B.Elements[B.Elements[0].Next].Elements.expo)
     {
-
+        Polyn This_Quotient = Get_This_Quotient(A.Elements[A.Elements[0].Next].Elements, B.Elements[B.Elements[0].Next].Elements);
+        Polyn tmp = Multiply(B, This_Quotient);
+        Quotient = Add(Quotient, This_Quotient);
+        A = Minus(A, tmp);
     }
+    Res.first = Quotient;
+    Res.second = A;
+    return Res;
 }
+
 int main()
 {
 
