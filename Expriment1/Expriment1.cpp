@@ -386,7 +386,19 @@ pair<Polyn, Polyn> Divide(Polyn A, Polyn &B)
     Res.second = A;
     return Res;
 }
-
+Polyn Get_Derivative_Function(Polyn &A, int k)
+{
+    Polyn Res = A;
+    for (int Pos = Res.Elements[0].Next; Pos; Pos = Res.Elements[Pos].Next)
+    {
+        for (int j = 1; j <= k; ++j)
+        {
+            Res.Elements[Pos].Elements.coef = Res.Elements[Pos].Elements.coef * Fraction(Res.Elements[Pos].Elements.expo, 1);
+            Res.Elements[Pos].Elements.expo--;
+        }
+    }
+    return Res;
+}
 int main()
 {
 
