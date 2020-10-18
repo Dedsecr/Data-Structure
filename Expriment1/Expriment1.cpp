@@ -139,9 +139,11 @@ struct Polyn
     int Length, AvailableP, LastP;
     Polyn() 
     {
+        LastP = 0;
         Length = 0;
         for (AvailableP = 1; AvailableP < MAXN; ++AvailableP)
             Available[AvailableP] = AvailableP;
+        AvailableP--;
     }
     int GetNewPos()
     {
@@ -156,6 +158,7 @@ struct Polyn
         Elements[LastP].Next = Pos;
         Elements[Pos].Elements = element;
         Elements[Pos].Next = 0;
+        LastP = Pos;
     }
 };
 EleNum Tmp[MAXN * MAXN], EleNum_Zero = EleNum(Fraction(0, 1), 0);
@@ -168,7 +171,7 @@ bool CoefIsLigal(string x)
     int Len = x.length();
     for (int i = 0; i < Len; ++i)
     {
-        if ((!IsDigit(x[i]) && x[i] != '/') || (x[i] == '/' && (i == 0 || i == Len - 1)))
+        if ((!IsDigit(x[i]) && x[i] != '/' && x[i] != '-') || (x[i] == '/' && (i == 0 || i == Len - 1)))
             return 0;
     }
     return 1;
@@ -209,9 +212,21 @@ bool GetElements(Polyn &polyn)
     {
         FracP--;
         int x = 0;
-        for (int i = 0; i < FracP; ++i)
+        if(input1[0] == '-')
         {
-            x = x * 10 + input1[i] - '0';
+            for (int i = 1; i < FracP; ++i)
+            {
+                x = x * 10 + input1[i] - '0';
+            }
+            x = -x;
+            cout << "^^^^^";
+        }
+        else
+        {
+            for (int i = 0; i < FracP; ++i)
+            {
+                x = x * 10 + input1[i] - '0';
+            }
         }
         numerator = x;
         x = 0;
@@ -224,9 +239,20 @@ bool GetElements(Polyn &polyn)
     else
     {
         int x = 0;
-        for (int i = 0; i < input1L; ++i)
+        if(input1[0] == '-')
         {
-            x = x * 10 + input1[i] - '0';
+            for (int i = 1; i < input1L; ++i)
+            {
+                x = x * 10 + input1[i] - '0';
+            }
+            x = -x;
+        }
+        else
+        {
+            for (int i = 0; i < input1L; ++i)
+            {
+                x = x * 10 + input1[i] - '0';
+            }
         }
         numerator = x;
         denominator = 1;
@@ -237,7 +263,6 @@ bool GetElements(Polyn &polyn)
     {
         x = x * 10 + input2[i] - '0';
     }
-
     polyn.Insert(EleNum(Fraction(numerator, denominator), x));
 
     return 1;
@@ -285,7 +310,6 @@ void Print(Polyn &polyn)
             First = 0;
         else
             cout << " + ";
-        
         printf("(%d/%d)*x^(%d)", polyn.Elements[Pos].Elements.coef.numerator,
                polyn.Elements[Pos].Elements.coef.denominator,
                polyn.Elements[Pos].Elements.expo);
@@ -440,6 +464,19 @@ int main()
 {
     int n;
     cin >> n;
-    Polyn test = Input(n);
+    Polyn test1 = Input(n),test2 = Input(n);
+    Print(test1);
+    Print(test2);
+    Polyn ans = Multiply(test1, test2);
+    Print(ans);
     return 0;
 }
+/*
+3
+2/3 1 3/4 2 4 3
+3/4 1 4/5 2 2/2 3
+
+3
+1 5 -2 3 1 2
+1/2 3 9/10 2 -3/5 1
+*/
