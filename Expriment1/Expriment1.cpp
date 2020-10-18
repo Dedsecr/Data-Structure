@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <string>
 #include <cstring>
+#include <cmath>
 using namespace std;
 const int MAXN = 100;
 struct Fraction
@@ -40,10 +41,6 @@ struct Fraction
     {
         return 1.0 * numerator / denominator > 1.0 * _.numerator / _.denominator;
     }
-    bool operator == (const Fraction _) const
-    {
-        return (numerator == _.numerator) && (denominator == _.denominator);
-    }
     Fraction operator * (const Fraction _) const
     {
         Fraction Res;
@@ -78,7 +75,7 @@ struct Fraction
     }
     double ToDouble()
     {
-        return numerator / denominator;
+        return 1.0 * numerator / denominator;
     }
 };
 struct EleNum
@@ -99,7 +96,7 @@ struct EleNum
         }
         EleNum Res;
         Res.coef = coef + _.coef;
-        Res.expo = expo;
+        Res.expo = _.expo;
         return Res;
     }
     EleNum operator - (const EleNum _) const
@@ -111,7 +108,7 @@ struct EleNum
         }
         EleNum Res;
         Res.coef = coef - _.coef;
-        Res.expo = expo;
+        Res.expo = _.expo;
         return Res;
     }
     EleNum operator * (const EleNum _) const
@@ -159,6 +156,11 @@ struct Polyn
         Elements[Pos].Elements = element;
         Elements[Pos].Next = 0;
         LastP = Pos;
+    }
+    void Recovery(int Pos)
+    {
+        Available[++AvailableP] = Pos;
+        Elements[Pos].Next = 0;
     }
 };
 EleNum Tmp[MAXN * MAXN], EleNum_Zero = EleNum(Fraction(0, 1), 0);
@@ -301,7 +303,7 @@ Polyn Input(int Length)
     }
     return Res;
 }
-void Print(Polyn &polyn)
+void Print(Polyn polyn)
 {
     bool First = 1;
     for (int Pos = polyn.Elements[0].Next; Pos; Pos = polyn.Elements[Pos].Next)
@@ -329,7 +331,7 @@ Polyn Add(Polyn &A, Polyn &B)
         }
         else if(A.Elements[P_A].Elements.expo < B.Elements[P_B].Elements.expo)
         {
-            Res.Insert(A.Elements[P_B].Elements);
+            Res.Insert(B.Elements[P_B].Elements);
             P_B = B.Elements[P_B].Next;
         }
         else
@@ -346,9 +348,10 @@ Polyn Add(Polyn &A, Polyn &B)
     }
     while(P_B)
     {
-        Res.Insert(A.Elements[P_B].Elements);
+        Res.Insert(B.Elements[P_B].Elements);
         P_B = B.Elements[P_B].Next;
     }
+    //cout << Res.Length << "^^^^^^^^^\n";
     return Res;
 }
 Polyn Minus(Polyn &A, Polyn &B)
@@ -411,6 +414,24 @@ Polyn Get_This_Quotient(EleNum A, EleNum B)
     Res.Insert(Now);
     return Res;
 }
+void Refresh(Polyn &A)
+{
+    int LasP = 0;
+    int Pos = A.Elements[0].Next;
+    while(Pos)
+    {
+        if(A.Elements[Pos].Elements.coef.numerator == 0)
+        {
+            int Tmp = Pos;
+            A.Elements[LasP].Next = A.Elements[Pos].Next;
+            Pos = A.Elements[Pos].Next;
+            A.Recovery(Tmp);
+        }
+        else
+            Pos = A.Elements[Pos].Next;
+    }
+
+}
 pair<Polyn, Polyn> Divide(Polyn A, Polyn &B)
 {
     pair<Polyn, Polyn> Res;
@@ -421,6 +442,7 @@ pair<Polyn, Polyn> Divide(Polyn A, Polyn &B)
         Polyn tmp = Multiply(B, This_Quotient);
         Quotient = Add(Quotient, This_Quotient);
         A = Minus(A, tmp);
+        Refresh(A);
     }
     Res.first = Quotient;
     Res.second = A;
@@ -439,24 +461,12 @@ Polyn Get_Derivative_Function(Polyn &A, int k)
     }
     return Res;
 }
-double QPow(double v,int expo)
-{
-    double Res = 1, base = v;
-    while(expo)
-    {
-        if(expo & 1)
-            Res *= base;
-        base *= v;
-        expo >>= 1;
-    }
-    return Res;
-}
 double Get_Result(Polyn &A, double x)
 {
     double Res = 0;
     for (int Pos = A.Elements[0].Next; Pos; Pos = A.Elements[Pos].Next)
     {
-        Res += A.Elements[Pos].Elements.coef.ToDouble() * QPow(x, A.Elements[Pos].Elements.expo);
+        Res += A.Elements[Pos].Elements.coef.ToDouble() * pow(x, A.Elements[Pos].Elements.expo);
     }
     return Res;
 }
@@ -467,8 +477,40 @@ int main()
     Polyn test1 = Input(n),test2 = Input(n);
     Print(test1);
     Print(test2);
-    Polyn ans = Multiply(test1, test2);
-    Print(ans);
+    cout << "Add:\n";
+    Print(Add(test1, test2));
+    cout << '\n';
+
+    cout << "Minus:\n";
+    Print(Minus(test1, test2));
+    cout << '\n';
+
+    cout << "Multiply:\n";
+    Print(Multiply(test1, test2));
+    cout << '\n';
+
+    pair<Polyn, Polyn> Ans = Divide(test1, test2);
+    cout << "Divide:\n";
+    Print(Ans.first);
+    Print(Ans.second);
+    cout << '\n';
+    //cout << "Get_Result:\n";
+    //Print(Get_Result(test1,));
+    //cout << '\n';
+
+    cout << "Get_Derivative_Function:\n";
+    Print(Get_Derivative_Function(test1,1));
+    cout << '\n';
+
+    cout << "Get_Derivative_Function:\n";
+    Print(Get_Derivative_Function(test2,1));
+    cout << '\n';
+
+    cout << "Get_Result:\n";
+    cout << Get_Result(test1, 1.5) << '\n';
+
+    cout << "Get_Result:\n";
+    cout << Get_Result(test2, 3) << '\n';
     return 0;
 }
 /*
