@@ -1,8 +1,8 @@
-#include<iostream>
-#include<cstdio>
-#include<algorithm>
-#include<string>
-#include<cstring>
+#include <iostream>
+#include <cstdio>
+#include <algorithm>
+#include <string>
+#include <cstring>
 using namespace std;
 const int MAXN = 100;
 struct Fraction
@@ -25,7 +25,8 @@ struct Fraction
     }
     int gcd(int x, int y)
     {
-        if(x == 0) return y;
+        if (x == 0)
+            return y;
         return gcd(y % x, x);
     }
     void Simplification()
@@ -34,19 +35,19 @@ struct Fraction
         numerator /= _;
         denominator /= _;
     }
-    bool operator < (const Fraction _)const
+    bool operator < (const Fraction _) const
     {
         return 1.0 * numerator / denominator < 1.0 * _.numerator / _.denominator;
     }
-    bool operator > (const Fraction _)const
+    bool operator > (const Fraction _) const
     {
         return 1.0 * numerator / denominator > 1.0 * _.numerator / _.denominator;
     }
-    bool operator == (const Fraction _)const
+    bool operator == (const Fraction _) const
     {
         return (numerator == _.numerator) && (denominator == _.denominator);
     }
-    Fraction operator * (const Fraction _)const
+    Fraction operator * (const Fraction _) const
     {
         Fraction Res;
         Res.numerator = numerator * _.numerator;
@@ -54,7 +55,7 @@ struct Fraction
         Res.Simplification();
         return Res;
     }
-    Fraction operator / (const Fraction _)const
+    Fraction operator/(const Fraction _) const
     {
         Fraction Res;
         Res.numerator = numerator * _.denominator;
@@ -67,7 +68,7 @@ struct EleNum
 {
     Fraction coef;
     int expo;
-    EleNum(){}
+    EleNum() {}
     EleNum(Fraction _c, int _e)
     {
         coef = _c, expo = _e;
@@ -77,7 +78,7 @@ struct Ele
 {
     EleNum Elements;
     int Next;
-    Ele(){}
+    Ele() {}
     Ele(EleNum _E, int _N)
     {
         Elements = _E, Next = _N;
@@ -89,21 +90,48 @@ struct Polyn
     int Available[MAXN];
     int Length;
     int AvailableP;
-    Polyn(){}
+    Polyn() {}
     Polyn(int _L)
     {
         AvailableP = 0;
         Length = _L;
-        for(int i = 1; i <= _L; ++i)
+        for (int i = 1; i <= _L; ++i)
         {
             Available[++AvailableP] = AvailableP;
         }
     }
 };
 EleNum SortTmp[MAXN];
-int GetNewPos(Polyn polyn)
+int GetNewPos(Polyn &polyn)
 {
-    return polyn.Available[polyn.AvailableP--];
+    int Res = polyn.Available[polyn.AvailableP--];
+    polyn.Elements[Res].Next = 0;
+    return Res;
+}
+int GetNewLen(Polyn &A, Polyn &B)
+{
+    int Res = 0;
+    int P_A = A.Elements[0].Next, P_B = B.Elements[0].Next;
+    while(P_A && P_B)
+    {
+        if(A.Elements[P_A].Elements.expo < B.Elements[P_B].Elements.expo)
+        {
+            Res++;
+            P_A = A.Elements[P_A].Next;
+        }
+        else if(A.Elements[P_A].Elements.expo > B.Elements[P_B].Elements.expo)
+        {
+            Res++;
+            P_B = B.Elements[P_B].Next;
+        }
+        else
+        {
+            Res++;
+            P_A = A.Elements[P_A].Next;
+            P_B = B.Elements[P_B].Next;    
+        }
+    }
+    return Res;
 }
 bool IsDigit(char x)
 {
@@ -112,9 +140,9 @@ bool IsDigit(char x)
 bool CoefIsLigal(string x)
 {
     int Len = x.length();
-    for(int i = 0; i < Len; ++i)
+    for (int i = 0; i < Len; ++i)
     {
-        if((!IsDigit(x[i]) && x[i] != '/') || (x[i] == '/' && (i == 0 || i == Len - 1)))
+        if ((!IsDigit(x[i]) && x[i] != '/') || (x[i] == '/' && (i == 0 || i == Len - 1)))
             return 0;
     }
     return 1;
@@ -122,9 +150,9 @@ bool CoefIsLigal(string x)
 bool ExpoIsLigal(string x)
 {
     int Len = x.length();
-    for(int i = 0; i < Len; ++i)
+    for (int i = 0; i < Len; ++i)
     {
-        if(!IsDigit(x[i]))
+        if (!IsDigit(x[i]))
             return 0;
     }
     return 1;
@@ -132,9 +160,9 @@ bool ExpoIsLigal(string x)
 int IsFrac(string x)
 {
     int Len = x.length();
-    for(int i = 0; i < Len; ++i)
+    for (int i = 0; i < Len; ++i)
     {
-        if(x[i] == '/')
+        if (x[i] == '/')
             return i + 1;
     }
     return 0;
@@ -144,23 +172,23 @@ bool GetElements(int Pos, Polyn &polyn)
     string input1, input2;
     int input1L, input2L, FracP;
     cin >> input1 >> input2;
-    if(!CoefIsLigal(input1) || !ExpoIsLigal(input2))
+    if (!CoefIsLigal(input1) || !ExpoIsLigal(input2))
         return 0;
     input1L = input1.length();
     input2L = input2.length();
 
     FracP = IsFrac(input1);
-    if(FracP)
+    if (FracP)
     {
-        FracP --;
+        FracP--;
         int x = 0;
-        for(int i = 0; i < FracP; ++i)
+        for (int i = 0; i < FracP; ++i)
         {
             x = x * 10 + input1[i] - '0';
         }
         polyn.Elements[Pos].Elements.coef.numerator = x;
         x = 0;
-        for(int i = FracP + 1; i < input1L; ++i)
+        for (int i = FracP + 1; i < input1L; ++i)
         {
             x = x * 10 + input1[i] - '0';
         }
@@ -169,21 +197,21 @@ bool GetElements(int Pos, Polyn &polyn)
     else
     {
         int x = 0;
-        for(int i = 0; i < input1L; ++i)
+        for (int i = 0; i < input1L; ++i)
         {
             x = x * 10 + input1[i] - '0';
         }
         polyn.Elements[Pos].Elements.coef.numerator = x;
         polyn.Elements[Pos].Elements.coef.denominator = 1;
     }
-    
+
     int x = 0;
-    for(int i = 0; i < input2L; ++i)
+    for (int i = 0; i < input2L; ++i)
     {
         x = x * 10 + input2[i] - '0';
     }
     polyn.Elements[Pos].Elements.expo = x;
-    
+
     return 1;
 }
 bool Cmp(const EleNum &a, const EleNum &b)
@@ -215,18 +243,54 @@ Polyn Input(int Length)
     {
         int NewPos = GetNewPos(Res);
         Res.Elements[LastP].Next = NewPos;
+        LastP = NewPos;
         while (!GetElements(NewPos, Res))
         {
             puts("Wrong format!");
         }
-        //scanf("%d%d",&Res.Elements->Elements.coef, &Res.Elements->Elements.expo);
+        Sort(Res);
     }
     return Res;
 }
-Polyn Add(Polyn A, Polyn B)
+Polyn Add(Polyn &A, Polyn &B)
 {
-    Polyn Res;
-    
+    int _L = GetNewLen(A, B);
+    Polyn Res(_L);
+    int LastP = 0;
+    int P_A = A.Elements[0].Next, P_B = B.Elements[0].Next;
+    while(P_A && P_B)
+    {
+        if(A.Elements[P_A].Elements.expo < B.Elements[P_B].Elements.expo)
+        {
+            int NewPos = GetNewPos(Res);
+            Res.Elements[LastP].Next = NewPos;
+            LastP = NewPos;
+            Res.Elements[NewPos].Elements = A.Elements[P_A].Elements;
+            P_A = A.Elements[P_A].Next;
+        }
+        else if(A.Elements[P_A].Elements.expo > B.Elements[P_B].Elements.expo)
+        {
+            int NewPos = GetNewPos(Res);
+            Res.Elements[LastP].Next = NewPos;
+            LastP = NewPos;
+            Res.Elements[NewPos].Elements = B.Elements[P_B].Elements;
+            P_B = B.Elements[P_B].Next;
+        }
+        else
+        {
+            int NewPos = GetNewPos(Res);
+            Res.Elements[LastP].Next = NewPos;
+            LastP = NewPos;
+            Res.Elements[NewPos].Elements = A.Elements[P_A].Elements;
+            P_A = A.Elements[P_A].Next;
+
+            NewPos = GetNewPos(Res);
+            Res.Elements[LastP].Next = NewPos;
+            LastP = NewPos;
+            Res.Elements[NewPos].Elements = B.Elements[P_B].Elements;
+            P_B = B.Elements[P_B].Next;
+        }
+    }
 }
 
 int main()
