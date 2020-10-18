@@ -91,7 +91,7 @@ struct EleNum
     }
     EleNum operator + (const EleNum _) const
     {
-        if(expo != _.expo)
+        if(expo != _.expo && expo)
         {
             cerr << "Error in " << __LINE__;
             exit(-1);
@@ -103,9 +103,21 @@ struct EleNum
     }
     EleNum operator - (const EleNum _) const
     {
+        if(expo != _.expo && expo)
+        {
+            cerr << "Error in " << __LINE__;
+            exit(-1);
+        }
         EleNum Res;
         Res.coef = coef - _.coef;
         Res.expo = expo;
+        return Res;
+    }
+    EleNum operator * (const EleNum _) const
+    {
+        EleNum Res;
+        Res.coef = coef * _.coef;
+        Res.expo = expo + _.expo;
         return Res;
     }
 };
@@ -136,7 +148,7 @@ struct Polyn
         }
     }
 };
-EleNum SortTmp[MAXN];
+EleNum Tmp[MAXN * MAXN], EleNum_Zero = EleNum(0, 0);
 int GetNewPos(Polyn &polyn)
 {
     int Res = polyn.Available[polyn.AvailableP--];
@@ -166,6 +178,18 @@ int GetNewLen(Polyn &A, Polyn &B)
             P_B = B.Elements[P_B].Next;    
         }
     }
+    return Res;
+}
+int GetNewLen_Multiply(Polyn &A, Polyn &B)
+{
+    int TmpP = 0, Res = 1;
+    for (int P_A = A.Elements[0].Next; P_A; P_A = A.Elements[P_A].Next)
+        for (int P_B = B.Elements[0].Next; P_B; P_B = B.Elements[P_B].Next)
+            Tmp[++TmpP] = A.Elements[P_A].Elements * B.Elements[P_B].Elements;
+    sort(Tmp + 1, Tmp + 1 + TmpP, Cmp);
+    for (int i = 2; i <= TmpP; ++i)
+        if(Tmp[i].expo!=Tmp[i-1].expo)
+            Res++;
     return Res;
 }
 bool IsDigit(char x)
@@ -260,14 +284,14 @@ void Sort(Polyn &polyn)
     for (int i = 1; i <= Length; ++i)
     {
         P = polyn.Elements[P].Next;
-        SortTmp[i] = polyn.Elements[P].Elements;
+        Tmp[i] = polyn.Elements[P].Elements;
     }
-    sort(SortTmp + 1, SortTmp + 1 + Length, Cmp);
+    sort(Tmp + 1, Tmp + 1 + Length, Cmp);
     P = 0;
     for (int i = 1; i <= Length; ++i)
     {
         P = polyn.Elements[P].Next;
-        polyn.Elements[P].Elements = SortTmp[i];
+        polyn.Elements[P].Elements = Tmp[i];
     }
 }
 Polyn Input(int Length)
@@ -321,6 +345,23 @@ Polyn Add(Polyn &A, Polyn &B)
             P_B = B.Elements[P_B].Next;
         }
     }
+    while(P_A)
+    {
+        int NewPos = GetNewPos(Res);
+        Res.Elements[LastP].Next = NewPos;
+        LastP = NewPos;
+        Res.Elements[NewPos].Elements = A.Elements[P_A].Elements;
+        P_A = A.Elements[P_A].Next;
+    }
+    while(P_B)
+    {
+        int NewPos = GetNewPos(Res);
+        Res.Elements[LastP].Next = NewPos;
+        LastP = NewPos;
+        Res.Elements[NewPos].Elements = B.Elements[P_B].Elements;
+        P_B = B.Elements[P_B].Next;
+    }
+    return Res;
 }
 Polyn Minus(Polyn &A, Polyn &B)
 {
@@ -343,7 +384,7 @@ Polyn Minus(Polyn &A, Polyn &B)
             int NewPos = GetNewPos(Res);
             Res.Elements[LastP].Next = NewPos;
             LastP = NewPos;
-            Res.Elements[NewPos].Elements = B.Elements[P_B].Elements;
+            Res.Elements[NewPos].Elements = EleNum_Zero - B.Elements[P_B].Elements;
             P_B = B.Elements[P_B].Next;
         }
         else
@@ -356,6 +397,48 @@ Polyn Minus(Polyn &A, Polyn &B)
             P_B = B.Elements[P_B].Next;
         }
     }
+    while(P_A)
+    {
+        int NewPos = GetNewPos(Res);
+        Res.Elements[LastP].Next = NewPos;
+        LastP = NewPos;
+        Res.Elements[NewPos].Elements = A.Elements[P_A].Elements;
+        P_A = A.Elements[P_A].Next;
+    }
+    while(P_B)
+    {
+        int NewPos = GetNewPos(Res);
+        Res.Elements[LastP].Next = NewPos;
+        LastP = NewPos;
+        Res.Elements[NewPos].Elements = EleNum_Zero - B.Elements[P_B].Elements;
+        P_B = B.Elements[P_B].Next;
+    }
+    return Res;
+}
+Polyn Multiply(Polyn &A, Polyn &B)
+{
+    int _L = GetNewLen_Multiply(A, B);
+    Polyn Res(_L);
+    int LastP = 0;
+    int TmpP = 0;
+    for (int P_A = A.Elements[0].Next; P_A; P_A = A.Elements[P_A].Next)
+        for (int P_B = B.Elements[0].Next; P_B; P_B = B.Elements[P_B].Next)
+            Tmp[++TmpP] = A.Elements[P_A].Elements * B.Elements[P_B].Elements;
+    sort(Tmp + 1, Tmp + 1 + TmpP, Cmp);
+    Tmp[0].expo = Tmp[1].expo - 1;
+    for (int i = 1; i <= TmpP; ++i)
+    {
+        if(Tmp[i].expo != Tmp[i-1].expo)
+        {
+            int NewPos = GetNewPos(Res);
+            Res.Elements[LastP].Next = NewPos;
+            LastP = NewPos;
+            Res.Elements[NewPos].Elements = Tmp[i];
+        }
+        else
+            Res.Elements[LastP].Elements = Res.Elements[LastP].Elements + Tmp[i];
+    }
+    return Res;
 }
 int main()
 {
