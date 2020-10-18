@@ -161,12 +161,12 @@ int GetNewLen(Polyn &A, Polyn &B)
     int P_A = A.Elements[0].Next, P_B = B.Elements[0].Next;
     while(P_A && P_B)
     {
-        if(A.Elements[P_A].Elements.expo < B.Elements[P_B].Elements.expo)
+        if(A.Elements[P_A].Elements.expo > B.Elements[P_B].Elements.expo)
         {
             Res++;
             P_A = A.Elements[P_A].Next;
         }
-        else if(A.Elements[P_A].Elements.expo > B.Elements[P_B].Elements.expo)
+        else if(A.Elements[P_A].Elements.expo < B.Elements[P_B].Elements.expo)
         {
             Res++;
             P_B = B.Elements[P_B].Next;
@@ -188,7 +188,7 @@ int GetNewLen_Multiply(Polyn &A, Polyn &B)
             Tmp[++TmpP] = A.Elements[P_A].Elements * B.Elements[P_B].Elements;
     sort(Tmp + 1, Tmp + 1 + TmpP, Cmp);
     for (int i = 2; i <= TmpP; ++i)
-        if(Tmp[i].expo!=Tmp[i-1].expo)
+        if(Tmp[i].expo != Tmp[i-1].expo)
             Res++;
     return Res;
 }
@@ -275,7 +275,7 @@ bool GetElements(int Pos, Polyn &polyn)
 }
 bool Cmp(const EleNum &a, const EleNum &b)
 {
-    return a.expo < b.expo;
+    return a.expo > b.expo;
 }
 void Sort(Polyn &polyn)
 {
@@ -319,7 +319,7 @@ Polyn Add(Polyn &A, Polyn &B)
     int P_A = A.Elements[0].Next, P_B = B.Elements[0].Next;
     while(P_A && P_B)
     {
-        if(A.Elements[P_A].Elements.expo < B.Elements[P_B].Elements.expo)
+        if(A.Elements[P_A].Elements.expo > B.Elements[P_B].Elements.expo)
         {
             int NewPos = GetNewPos(Res);
             Res.Elements[LastP].Next = NewPos;
@@ -327,7 +327,7 @@ Polyn Add(Polyn &A, Polyn &B)
             Res.Elements[NewPos].Elements = A.Elements[P_A].Elements;
             P_A = A.Elements[P_A].Next;
         }
-        else if(A.Elements[P_A].Elements.expo > B.Elements[P_B].Elements.expo)
+        else if(A.Elements[P_A].Elements.expo < B.Elements[P_B].Elements.expo)
         {
             int NewPos = GetNewPos(Res);
             Res.Elements[LastP].Next = NewPos;
@@ -371,7 +371,7 @@ Polyn Minus(Polyn &A, Polyn &B)
     int P_A = A.Elements[0].Next, P_B = B.Elements[0].Next;
     while(P_A && P_B)
     {
-        if(A.Elements[P_A].Elements.expo < B.Elements[P_B].Elements.expo)
+        if(A.Elements[P_A].Elements.expo > B.Elements[P_B].Elements.expo)
         {
             int NewPos = GetNewPos(Res);
             Res.Elements[LastP].Next = NewPos;
@@ -379,7 +379,7 @@ Polyn Minus(Polyn &A, Polyn &B)
             Res.Elements[NewPos].Elements = A.Elements[P_A].Elements;
             P_A = A.Elements[P_A].Next;
         }
-        else if(A.Elements[P_A].Elements.expo > B.Elements[P_B].Elements.expo)
+        else if(A.Elements[P_A].Elements.expo < B.Elements[P_B].Elements.expo)
         {
             int NewPos = GetNewPos(Res);
             Res.Elements[LastP].Next = NewPos;
@@ -425,7 +425,7 @@ Polyn Multiply(Polyn &A, Polyn &B)
         for (int P_B = B.Elements[0].Next; P_B; P_B = B.Elements[P_B].Next)
             Tmp[++TmpP] = A.Elements[P_A].Elements * B.Elements[P_B].Elements;
     sort(Tmp + 1, Tmp + 1 + TmpP, Cmp);
-    Tmp[0].expo = Tmp[1].expo - 1;
+    Tmp[0].expo = Tmp[1].expo + 1;
     for (int i = 1; i <= TmpP; ++i)
     {
         if(Tmp[i].expo != Tmp[i-1].expo)
@@ -440,6 +440,7 @@ Polyn Multiply(Polyn &A, Polyn &B)
     }
     return Res;
 }
+
 int main()
 {
 
