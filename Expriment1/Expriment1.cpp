@@ -494,9 +494,6 @@ int main()
     Print(Ans.first);
     Print(Ans.second);
     cout << '\n';
-    //cout << "Get_Result:\n";
-    //Print(Get_Result(test1,));
-    //cout << '\n';
 
     cout << "Get_Derivative_Function:\n";
     Print(Get_Derivative_Function(test1,1));
