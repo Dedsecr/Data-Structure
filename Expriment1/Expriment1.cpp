@@ -32,6 +32,8 @@ struct Fraction
         int _ = gcd(abs(numerator), abs(denominator));
         numerator /= _;
         denominator /= _;
+        if(numerator < 0 && denominator < 0)
+            numerator = -numerator, denominator = -denominator;
     }
     bool operator < (const Fraction _) const
     {
@@ -221,7 +223,6 @@ bool GetElements(Polyn &polyn)
                 x = x * 10 + input1[i] - '0';
             }
             x = -x;
-            cout << "^^^^^";
         }
         else
         {
@@ -472,9 +473,13 @@ double Get_Result(Polyn &A, double x)
 }
 int main()
 {
-    int n;
-    cin >> n;
-    Polyn test1 = Input(n),test2 = Input(n);
+    freopen("Expriment1_In.txt", "r", stdin);
+    freopen("Expriment1_Out.txt", "w", stdout);
+    int n1, n2;
+    cin >> n1;
+    Polyn test1 = Input(n1);
+    cin >> n2;
+    Polyn test2 = Input(n2);
     Print(test1);
     Print(test2);
     cout << "Add:\n";
