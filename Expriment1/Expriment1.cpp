@@ -6,6 +6,7 @@
 #include <cmath>
 using namespace std;
 const int MAXN = 100;
+//分数
 struct Fraction
 {
     int numerator, denominator;
@@ -21,12 +22,14 @@ struct Fraction
         numerator = _n;
         denominator = 1;
     }
+    //求最大公因数
     int gcd(int x, int y)
     {
         if (x == 0)
             return y;
         return gcd(y % x, x);
     }
+    //分数化简
     void Simplification()
     {
         int _ = gcd(abs(numerator), abs(denominator));
@@ -75,11 +78,13 @@ struct Fraction
         Res.Simplification();
         return Res;
     }
+    //分数转double
     double ToDouble()
     {
         return 1.0 * numerator / denominator;
     }
 };
+//多项式项
 struct EleNum
 {
     Fraction coef;
@@ -121,6 +126,7 @@ struct EleNum
         return Res;
     }
 };
+//多项式中的项
 struct Ele
 {
     EleNum Elements;
@@ -131,6 +137,7 @@ struct Ele
         Elements = _E, Next = _N;
     }
 };
+//多项式
 struct Polyn
 {
     Ele Elements[MAXN];
@@ -144,12 +151,14 @@ struct Polyn
             Available[AvailableP] = AvailableP;
         AvailableP--;
     }
+    //获取新位置
     int GetNewPos()
     {
         int Res = Available[AvailableP--];
         Elements[Res].Next = 0;
         return Res;
     }
+    //插入新项
     void Insert(EleNum element)
     {
         int Pos = GetNewPos();
@@ -159,6 +168,7 @@ struct Polyn
         Elements[Pos].Next = 0;
         LastP = Pos;
     }
+    //回收空间操作
     void Recovery(int Pos)
     {
         Available[++AvailableP] = Pos;
@@ -166,10 +176,12 @@ struct Polyn
     }
 };
 EleNum Tmp[MAXN * MAXN], EleNum_Zero = EleNum(Fraction(0, 1), 0);
+//判断是否是数字
 bool IsDigit(char x)
 {
     return x >= '0' && x <= '9';
 }
+//判断系数是否合法
 bool CoefIsLigal(string x)
 {
     int Len = x.length();
@@ -180,6 +192,7 @@ bool CoefIsLigal(string x)
     }
     return 1;
 }
+//判断指数是否合法
 bool ExpoIsLigal(string x)
 {
     int Len = x.length();
@@ -190,6 +203,7 @@ bool ExpoIsLigal(string x)
     }
     return 1;
 }
+//判断是否含有分数
 int IsFrac(string x)
 {
     int Len = x.length();
@@ -200,6 +214,7 @@ int IsFrac(string x)
     }
     return 0;
 }
+//输入项
 bool GetElements(Polyn &polyn)
 {
     string input1, input2;
@@ -274,6 +289,7 @@ bool Cmp(const EleNum &a, const EleNum &b)
 {
     return a.expo > b.expo;
 }
+//对多项式排序
 void Sort(Polyn &polyn)
 {
     int Length = polyn.Length;
@@ -291,6 +307,7 @@ void Sort(Polyn &polyn)
         polyn.Elements[P].Elements = Tmp[i];
     }
 }
+//输入多项式
 Polyn Input(int Length)
 {
     Polyn Res;
@@ -304,6 +321,7 @@ Polyn Input(int Length)
     }
     return Res;
 }
+//打印多项式
 void Print(Polyn polyn)
 {
     bool First = 1;
@@ -319,6 +337,7 @@ void Print(Polyn polyn)
     }
     puts("");
 }
+//多项式求和
 Polyn Add(Polyn &A, Polyn &B)
 {
     Polyn Res;
@@ -355,6 +374,7 @@ Polyn Add(Polyn &A, Polyn &B)
     //cout << Res.Length << "^^^^^^^^^\n";
     return Res;
 }
+//多项式相减
 Polyn Minus(Polyn &A, Polyn &B)
 {
     Polyn Res;
@@ -390,6 +410,7 @@ Polyn Minus(Polyn &A, Polyn &B)
     }
     return Res;
 }
+//多项式相乘
 Polyn Multiply(Polyn &A, Polyn &B)
 {
     Polyn Res;
@@ -408,6 +429,7 @@ Polyn Multiply(Polyn &A, Polyn &B)
     }
     return Res;
 }
+//获取当前的商
 Polyn Get_This_Quotient(EleNum A, EleNum B)
 {
     EleNum Now = EleNum(A.coef / B.coef, A.expo - B.expo);
@@ -415,6 +437,7 @@ Polyn Get_This_Quotient(EleNum A, EleNum B)
     Res.Insert(Now);
     return Res;
 }
+//去掉系数为0的项
 void Refresh(Polyn &A)
 {
     int LasP = 0;
@@ -429,10 +452,11 @@ void Refresh(Polyn &A)
             A.Recovery(Tmp);
         }
         else
-            Pos = A.Elements[Pos].Next;
+            LasP = Pos, Pos = A.Elements[Pos].Next;
     }
 
 }
+//多项式相除
 pair<Polyn, Polyn> Divide(Polyn A, Polyn &B)
 {
     pair<Polyn, Polyn> Res;
@@ -449,6 +473,7 @@ pair<Polyn, Polyn> Divide(Polyn A, Polyn &B)
     Res.second = A;
     return Res;
 }
+//多项式求导
 Polyn Get_Derivative_Function(Polyn &A, int k)
 {
     Polyn Res = A;
@@ -460,8 +485,10 @@ Polyn Get_Derivative_Function(Polyn &A, int k)
             Res.Elements[Pos].Elements.expo--;
         }
     }
+    Refresh(Res);
     return Res;
 }
+//多项式求值
 double Get_Result(Polyn &A, double x)
 {
     double Res = 0;
@@ -473,36 +500,51 @@ double Get_Result(Polyn &A, double x)
 }
 int main()
 {
+    //重定向输入输出至文件
     freopen("Expriment1_In.txt", "r", stdin);
     freopen("Expriment1_Out.txt", "w", stdout);
     int n1, n2, k;
     double x1, x2;
+
+    //输入第一个多项式的项数
     cin >> n1;
+    //输入第一个多项式
     Polyn test1 = Input(n1);
+
+    //输入第二个多项式的项数
     cin >> n2;
+    //输入第二个多项式
     Polyn test2 = Input(n2);
+
     cin >> k;
     cin >> x1 >> x2;
+    //输出两个多项式
     Print(test1);
     Print(test2);
+
+    //输出相加结果
     cout << "Add:\n";
     Print(Add(test1, test2));
     cout << '\n';
 
+    //输出相减结果
     cout << "Minus:\n";
     Print(Minus(test1, test2));
     cout << '\n';
 
+    //输出相乘结果
     cout << "Multiply:\n";
     Print(Multiply(test1, test2));
     cout << '\n';
 
+    //输出相除结果
     pair<Polyn, Polyn> Ans = Divide(test1, test2);
     cout << "Divide:\n";
     Print(Ans.first);
     Print(Ans.second);
     cout << '\n';
 
+    //输出求导结果
     cout << "Get_Derivative_Function:\n";
     Print(Get_Derivative_Function(test1,1));
     cout << '\n';
@@ -511,6 +553,7 @@ int main()
     Print(Get_Derivative_Function(test2,1));
     cout << '\n';
 
+    //输出求值结果
     cout << "Get_Result:\n";
     cout << Get_Result(test1, x1) << '\n';
 
@@ -518,12 +561,3 @@ int main()
     cout << Get_Result(test2, x2) << '\n';
     return 0;
 }
-/*
-3
-2/3 1 3/4 2 4 3
-3/4 1 4/5 2 2/2 3
-
-3
-1 5 -2 3 1 2
-1/2 3 9/10 2 -3/5 1
-*/
