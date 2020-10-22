@@ -57,7 +57,7 @@ struct Fraction
         Res.numerator = numerator * _.denominator;
         Res.denominator = denominator * _.numerator;
         Res.Simplification();
-        return Res;
+        return Res; 
     }
     Fraction operator + (const Fraction _) const
     {
@@ -475,11 +475,14 @@ int main()
 {
     freopen("Expriment1_In.txt", "r", stdin);
     freopen("Expriment1_Out.txt", "w", stdout);
-    int n1, n2;
+    int n1, n2, k;
+    double x1, x2;
     cin >> n1;
     Polyn test1 = Input(n1);
     cin >> n2;
     Polyn test2 = Input(n2);
+    cin >> k;
+    cin >> x1 >> x2;
     Print(test1);
     Print(test2);
     cout << "Add:\n";
@@ -509,10 +512,10 @@ int main()
     cout << '\n';
 
     cout << "Get_Result:\n";
-    cout << Get_Result(test1, 1.5) << '\n';
+    cout << Get_Result(test1, x1) << '\n';
 
     cout << "Get_Result:\n";
-    cout << Get_Result(test2, 3) << '\n';
+    cout << Get_Result(test2, x2) << '\n';
     return 0;
 }
 /*
