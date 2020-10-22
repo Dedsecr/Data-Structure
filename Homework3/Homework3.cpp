@@ -141,3 +141,4 @@ int Is_CompleteTree(Tree &Root, int Depth, bool &Is)
         return LDepth;
     }
 }
+void Get_MaxWidth(Tree &Root, int * &Width)
