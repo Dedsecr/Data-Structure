@@ -24,10 +24,11 @@ void BuildTree(string &S, Tree &Root, int &P)
 {
     if(P == S.length())
         return;
+    Root->data = S[P];
+    P++;
+    
     if(S[P] != '#')
     {
-        Root->data = S[P];
-        P++;
         Root->LCh = new TreeNode;
         BuildTree(S, Root->LCh, P);
     }
@@ -35,8 +36,6 @@ void BuildTree(string &S, Tree &Root, int &P)
         P++;
     if(S[P] != '#')
     {
-        Root->data = S[P];
-        P++;
         Root->RCh = new TreeNode;
         BuildTree(S, Root->RCh, P);
     }
@@ -197,7 +196,7 @@ int Get_MaxWidth(Tree &Root)
 }
 void PrintTree(Tree &Root)
 {
-    
+    cout << Root->data;
     if(Root->LCh != NULL)
         cout << Root->LCh->data;
     else
@@ -205,7 +204,7 @@ void PrintTree(Tree &Root)
     if(Root->RCh != NULL)
         cout << Root->RCh->data << '\n';
     else
-        cout << "#\n";
+        cout << "#" << '\n';
     if(Root->LCh != NULL)
         PrintTree(Root->LCh);
     if(Root->RCh != NULL)
@@ -218,8 +217,7 @@ int main()
     Tree Root = new TreeNode;
     cin >> S;
     BuildTree(S, Root, P);
-    cout << "&";
-    PrintTree(Root);
+    //PrintTree(Root);
     return 0;
 }
 //ABDH##I##E##CF#J##G##
