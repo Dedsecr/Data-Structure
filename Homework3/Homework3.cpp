@@ -42,52 +42,66 @@ void BuildTree(string &S, Tree &Root, int &P)
     else
         P++;
 }
+Tree InputTree()
+{
+    string S;
+    int P = 0;
+    Tree Root = new TreeNode;
+    cin >> S;
+    BuildTree(S, Root, P);
+    return Root;
+}
 void Get_PreOrder_WithRecursion(Tree &Root)
 {
+    cout << Root->data << " ";
     if(Root->LCh != NULL)
         Get_PreOrder_WithRecursion(Root->LCh);
-    cout << Root->data << " ";
     if(Root->RCh != NULL)
         Get_PreOrder_WithRecursion(Root->RCh);    
 }
 void Get_InOrder_WithRecursion(Tree &Root)
 {
-    cout << Root->data << " ";
     if(Root->LCh != NULL)
         Get_InOrder_WithRecursion(Root->LCh);
+    cout << Root->data << " ";
     if(Root->RCh != NULL)
         Get_InOrder_WithRecursion(Root->RCh);    
 }
 void Get_PostOrder_WithRecursion(Tree &Root)
 {
+    if(Root->LCh != NULL)
+        Get_PostOrder_WithRecursion(Root->LCh);
     if(Root->RCh != NULL)
         Get_PostOrder_WithRecursion(Root->RCh);
     cout << Root->data << " ";
-    if(Root->LCh != NULL)
-        Get_PostOrder_WithRecursion(Root->LCh);
 }
 void Ini_vis(Tree &Root)
 {
     Root->vis = 0;
     if(Root->LCh != NULL)
-        Get_InOrder_WithRecursion(Root->LCh);
+        Ini_vis(Root->LCh);
     if(Root->RCh != NULL)
-        Get_InOrder_WithRecursion(Root->RCh);  
+        Ini_vis(Root->RCh);  
 }
 void Get_PreOrder_WithoutRecursion(Tree &Root)
 {
     Ini_vis(Root);
     stack<Tree>S;
     S.push(Root);
+    cout << Root->data << " ";
     while(!S.empty())
     {
         Node x = S.top();
         x->vis = 1;
         if(x->LCh != NULL && !x->LCh->vis)
+        {
             S.push(x->LCh);
+            cout << x->LCh->data << " ";
+        }
         else
         {
-            cout << x->data <<" ";
+            if((x->LCh == NULL || x->LCh->vis) && x->RCh != NULL)
+                cout << x->RCh->data << " ";
             S.pop();
             if(x->RCh != NULL && !x->RCh->vis)
                 S.push(x->RCh);
@@ -104,11 +118,11 @@ void Get_InOrder_WithoutRecursion(Tree &Root)
     {
         Node x = S.top();
         x->vis = 1;
-        cout << x->data <<" ";
         if(x->LCh != NULL && !x->LCh->vis)
             S.push(x->LCh);
         else
         {
+            cout << x->data <<" ";
             S.pop();
             if(x->RCh != NULL && !x->RCh->vis)
                 S.push(x->RCh);
@@ -125,14 +139,14 @@ void Get_PostOrder_WithoutRecursion(Tree &Root)
     {
         Node x = S.top();
         x->vis = 1;
-        if(x->RCh != NULL && !x->RCh->vis)
+        if(x->LCh != NULL && !x->LCh->vis)
+            S.push(x->LCh);
+        else if(x->RCh != NULL && !x->RCh->vis)
             S.push(x->RCh);
         else
         {
             cout << x->data <<" ";
             S.pop();
-            if(x->LCh != NULL && !x->LCh->vis)
-                S.push(x->LCh);
         }
     }
     puts("");
@@ -212,11 +226,23 @@ void PrintTree(Tree &Root)
 }
 int main()
 {
-    string S;
-    int P = 0;
-    Tree Root = new TreeNode;
-    cin >> S;
-    BuildTree(S, Root, P);
+    freopen("Homework3_In.txt", "r", stdin);
+    Tree Root = InputTree();
+    Get_PreOrder_WithRecursion(Root);
+    cout << '\n';
+    Get_PreOrder_WithoutRecursion(Root);
+    cout << '\n';
+    Get_InOrder_WithRecursion(Root);
+    cout << '\n';
+    Get_InOrder_WithoutRecursion(Root);
+    cout << '\n';
+    Get_PostOrder_WithRecursion(Root);
+    cout << '\n';
+    Get_PostOrder_WithoutRecursion(Root);
+    cout << '\n';
+
+    cout << Is_CompleteTree(Root) << endl;
+    cout << Get_MaxWidth(Root) << endl;
     //PrintTree(Root);
     return 0;
 }
