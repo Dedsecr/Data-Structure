@@ -8,7 +8,7 @@ using namespace std;
 const int MAXN = 100;
 struct TreeNode
 {
-    int data;
+    char data;
     bool vis;
     TreeNode * LCh;
     TreeNode * RCh;
@@ -195,6 +195,22 @@ int Get_MaxWidth(Tree &Root)
         Res = max(Res, Width[i]);
     return Res;
 }
+void PrintTree(Tree &Root)
+{
+    
+    if(Root->LCh != NULL)
+        cout << Root->LCh->data;
+    else
+        cout << "#";   
+    if(Root->RCh != NULL)
+        cout << Root->RCh->data << '\n';
+    else
+        cout << "#\n";
+    if(Root->LCh != NULL)
+        PrintTree(Root->LCh);
+    if(Root->RCh != NULL)
+        PrintTree(Root->RCh);
+}
 int main()
 {
     string S;
@@ -202,5 +218,8 @@ int main()
     Tree Root = new TreeNode;
     cin >> S;
     BuildTree(S, Root, P);
+    cout << "&";
+    PrintTree(Root);
     return 0;
 }
+//ABDH##I##E##CF#J##G##
