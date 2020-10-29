@@ -228,22 +228,37 @@ int main()
 {
     freopen("Homework3_In.txt", "r", stdin);
     Tree Root = InputTree();
+
+    puts("Your Tree:");
+    PrintTree(Root);
+    
+    puts("PreOrder_WithRecursion:");
     Get_PreOrder_WithRecursion(Root);
     cout << '\n';
+    puts("PreOrder_WithoutRecursion:");
     Get_PreOrder_WithoutRecursion(Root);
     cout << '\n';
+    
+    puts("InOrder_WithRecursion:");
     Get_InOrder_WithRecursion(Root);
     cout << '\n';
+    puts("InOrder_WithoutRecursion:");
     Get_InOrder_WithoutRecursion(Root);
     cout << '\n';
+
+    puts("PostOrder_WithRecursion:");
     Get_PostOrder_WithRecursion(Root);
     cout << '\n';
+    puts("PostOrder_WithoutRecursion:");
     Get_PostOrder_WithoutRecursion(Root);
     cout << '\n';
 
+    puts("Complete_Tree?");
     cout << Is_CompleteTree(Root) << endl;
+
+    puts("Max_Width:");
     cout << Get_MaxWidth(Root) << endl;
-    //PrintTree(Root);
+    
     return 0;
 }
 //ABDH##I##E##CF#J##G##
