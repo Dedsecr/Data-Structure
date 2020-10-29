@@ -5,6 +5,7 @@
 #include <cstring>
 #include <stack>
 #include <queue>
+#include <vector>
 using namespace std;
 const int MAXN = 50;
 struct Text
@@ -22,20 +23,19 @@ struct HuffmanCode
 {
     
 };
+int ChildNum = 2;
 struct TreeNode
 {
-    int WPL;
+    //int WPL;
     char Text;
     double Val;
-    TreeNode * LCh;
-    TreeNode * RCh;
+    vector<TreeNode *>Ch;
     TreeNode()
     {
         Text = 0;
-        WPL = 0;
+        //WPL = 0;
         Val = 0;
-        this->LCh = NULL;
-        this->RCh = NULL;
+        Ch.clear();
     }
 };
 
@@ -49,14 +49,15 @@ struct Cmp
     }
 };
 priority_queue<Tree, vector<Tree>, Cmp>Q;
-int CalcWPL(Tree &T1, Tree &T2)
+/*int CalcWPL(Tree &T1, Tree &T2)
 {
     return T1->WPL + T2->WPL + T1->Val + T2->Val;
 }
 int CalcWPL(Tree &T)
 {
     return T->WPL + T->Val;
-}
+}*/
+/*
 int CalcVal(Tree &T1, Tree &T2)
 {
     return T1->Val + T2->Val;
@@ -64,12 +65,49 @@ int CalcVal(Tree &T1, Tree &T2)
 Tree MergeTrees(Tree &T1,Tree &T2)
 {
     Tree T = new TreeNode;
-    T->WPL = CalcWPL(T1, T2);
+    //T->WPL = CalcWPL(T1, T2);
     T->Val = CalcVal(T1, T2);
-}
-void BuildHuffmanTree(int ChildNum)
+}*/
+void BuildHuffmanTree(Text &text)
 {
-    
+    while(!Q.empty())
+        Q.pop();
+    for (int i = 0; i < 126; ++i)
+        if(abs(text.Frequency[i]) > 1e-8)
+        {
+            Tree T = new TreeNode;
+            T->Val = text.Frequency[i];
+            T->Text = i;
+            Q.push(T);
+        }
+    while(1)
+    {
+        if(Q.size() <= ChildNum)
+        {
+            Tree T = new TreeNode;
+            while(!Q.empty())
+            {
+                Tree now = Q.top();
+                Q.pop();
+                T->Val += now->Val;
+                T->Ch.push_back(now);
+            }
+            Q.push(T);
+            break;
+        }
+        else
+        {
+            Tree T = new TreeNode;
+            for(int i = 1; i <= ChildNum; ++i)
+            {
+                Tree now = Q.top();
+                Q.pop();
+                T->Val += now->Val;
+                T->Ch.push_back(now);
+            }
+            Q.push(T);
+        }   
+    }
 }
 Text GetFrequency()
 {
