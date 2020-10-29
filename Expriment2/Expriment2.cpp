@@ -5,9 +5,11 @@
 #include <cstring>
 #include <stack>
 #include <queue>
+#include <map>
 #include <vector>
 using namespace std;
 const int MAXN = 50;
+string OriginalText;
 struct Text
 {
     int Length;
@@ -28,6 +30,9 @@ struct HuffmanCode
 {
     vector<HCode> Code;
 };
+
+map<char, string>HFCMap;
+
 int Stack[MAXN], StackP;
 int ChildNum = 2;
 struct TreeNode
@@ -106,16 +111,17 @@ Tree BuildHuffmanTree(Text &text)
 Text GetFrequency()
 {
     Text Res;
-    string S = "", now;
+    string now;
+    OriginalText = "";
     while (getline(cin, now))
     {
-        S += now;
+        OriginalText += now;
     }
-    int Length = S.length();
+    int Length = OriginalText.length();
     Res.Length = Length;
     for (int i = 0; i < Length; ++i)
     {
-        Res.Frequency[S[i]] += 1;
+        Res.Frequency[OriginalText[i]] += 1;
     }
     for (int i = 0; i < 126; ++i)
     {
@@ -173,22 +179,43 @@ void PrintFrequency(Text &text)
     }
     puts("");
 }
+void GetMap(HuffmanCode *Code)
+{
+    int Size = Code->Code.size();
+    for (int i = 0; i < Size; ++i)
+    {
+        HFCMap[Code->Code[i].Text] = Code->Code[i].Code;
+    }
+}
 void GetHuffmanCode(Tree Root)
 {
     HuffmanCode *Code = new HuffmanCode;
     StackP = 0;
     GetHC(Root, Code);
+    GetMap(Code);
     PrintHC(Code);
 }
+void Encode()
+{
+    int Length = OriginalText.length();
+    for(int i = 0; i < Length; ++i)
+    {
+        cout << HFCMap[OriginalText[i]];
+    }
+    puts("");
+}
+void GetCompressionRatio()
 int main()
 {
     freopen("Expriment2_In.txt", "r", stdin);
     freopen("Expriment2_Out.txt", "w", stdout);
 
     ChildNum = 3;
+    
     Text text = GetFrequency();
     PrintFrequency(text);
     Tree T = BuildHuffmanTree(text);
     GetHuffmanCode(T);
+    Encode();
     return 0;
 }
