@@ -80,33 +80,20 @@ void BuildHuffmanTree(Text &text)
             T->Text = i;
             Q.push(T);
         }
-    while(1)
+    while(Q.size() != 1)
     {
-        if(Q.size() <= ChildNum)
+        int End = Q.size();
+        if(End > ChildNum)
+            End = ChildNum;
+        Tree T = new TreeNode;
+        for(int i = 1; i <= End; ++i)
         {
-            Tree T = new TreeNode;
-            while(!Q.empty())
-            {
-                Tree now = Q.top();
-                Q.pop();
-                T->Val += now->Val;
-                T->Ch.push_back(now);
-            }
-            Q.push(T);
-            break;
+            Tree now = Q.top();
+            Q.pop();
+            T->Val += now->Val;
+            T->Ch.push_back(now);
         }
-        else
-        {
-            Tree T = new TreeNode;
-            for(int i = 1; i <= ChildNum; ++i)
-            {
-                Tree now = Q.top();
-                Q.pop();
-                T->Val += now->Val;
-                T->Ch.push_back(now);
-            }
-            Q.push(T);
-        }   
+        Q.push(T);
     }
 }
 Text GetFrequency()
