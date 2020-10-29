@@ -19,10 +19,16 @@ struct Text
             Frequency[i] = 0;
     }
 };
+struct HCode
+{
+    vector<int>Code;
+    char Text;
+};
 struct HuffmanCode
 {
-    
+    vector<HCode>Code;
 };
+int Stack[MAXN], StackP;
 int ChildNum = 2;
 struct TreeNode
 {
@@ -68,7 +74,7 @@ Tree MergeTrees(Tree &T1,Tree &T2)
     //T->WPL = CalcWPL(T1, T2);
     T->Val = CalcVal(T1, T2);
 }*/
-void BuildHuffmanTree(Text &text)
+Tree BuildHuffmanTree(Text &text)
 {
     while(!Q.empty())
         Q.pop();
@@ -95,6 +101,7 @@ void BuildHuffmanTree(Text &text)
         }
         Q.push(T);
     }
+    return Q.top();
 }
 Text GetFrequency()
 {
@@ -115,4 +122,58 @@ Text GetFrequency()
         Res.Frequency[i] /= Length;
     }
     return Res;
+}
+void GetHC(Tree Root, HuffmanCode *Code)
+{
+    int Size = Root->Ch.size();
+    if(!Size)
+    {
+        if(!Root->Text)
+        {
+            cerr << "Error in " << __LINE__;
+            exit(-1);
+        }
+        HCode HC;
+        HC.Text = Root->Text;
+        for (int i = 1; i <= StackP; ++i)
+            HC.Code.push_back(Stack[i]);
+        Code->Code.push_back(HC);
+        return;
+    }
+    for (int i = 0; i < Size; ++i)
+    {
+        Stack[++StackP] = i;
+        GetHC(Root->Ch[i], Code);
+    }
+}
+void PrintHC(HuffmanCode *Code)
+{
+    int Size = Code->Code.size();
+    for (int i = 0; i < Size; ++i)
+    {
+        cout << Code->Code[i].Text << " : ";
+        int Siz = Code->Code[i].Code.size();
+        for (int j = 0; j < Siz; ++j)
+        {
+            cout << Code->Code[i].Code[j];
+        }
+        puts("");
+    }
+}
+void GetHuffmanCode(Tree Root)
+{
+    HuffmanCode *Code = new HuffmanCode;
+    StackP = 0;
+    GetHC(Root, Code);
+    PrintHC(Code);
+}
+int main()
+{
+    freopen("Expriment2_In.txt", "r", stdin);
+    freopen("Expriment2_Out.txt", "w", stdout);
+    
+    Text text = GetFrequency();
+    Tree T = BuildHuffmanTree(text);
+    GetHuffmanCode(T);
+    return 0;
 }
