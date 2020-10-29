@@ -4,6 +4,7 @@
 #include <string>
 #include <cstring>
 #include <stack>
+#include <queue>
 using namespace std;
 const int MAXN = 100;
 struct TreeNode
@@ -145,9 +146,25 @@ void Get_PostOrder_WithoutRecursion(Tree &Root)
             S.push(x->RCh);
         else
         {
-            cout << x->data <<" ";
+            cout << x->data << " ";
             S.pop();
         }
+    }
+    puts("");
+}
+void Get_LeverOrder(Tree &Root)
+{
+    queue<Tree>Q;
+    Q.push(Root);
+    while(!Q.empty())
+    {
+        Tree x = Q.front();
+        Q.pop();
+        cout << x->data << " ";
+        if(x->LCh != NULL)
+            Q.push(x->LCh);
+        if(x->RCh != NULL)
+            Q.push(x->RCh);
     }
     puts("");
 }
@@ -244,6 +261,10 @@ int main()
     cout << '\n';
     puts("InOrder_WithoutRecursion:");
     Get_InOrder_WithoutRecursion(Root);
+    cout << '\n';
+
+    puts("LeverOrder:");
+    Get_LeverOrder(Root);
     cout << '\n';
 
     puts("PostOrder_WithRecursion:");

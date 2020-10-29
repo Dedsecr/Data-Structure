@@ -205,6 +205,9 @@ void Encode()
     puts("");
 }
 void GetCompressionRatio()
+{
+    
+}
 int main()
 {
     freopen("Expriment2_In.txt", "r", stdin);
