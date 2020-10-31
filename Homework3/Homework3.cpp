@@ -256,7 +256,7 @@ int main()
     //输出二叉树，共n行，每行输出该节点、该节点左儿子、该节点右儿子，若无儿子则输出#
     puts("Your Tree:");
     PrintTree(Root);
-    
+
     //分别用递归和非递归实现输出先序遍历序列
     puts("PreOrder_WithRecursion:");
     Get_PreOrder_WithRecursion(Root);
@@ -264,7 +264,7 @@ int main()
     puts("PreOrder_WithoutRecursion:");
     Get_PreOrder_WithoutRecursion(Root);
     cout << '\n';
-    
+
     //分别用递归和非递归实现输出中序遍历序列
     puts("InOrder_WithRecursion:");
     Get_InOrder_WithRecursion(Root);
@@ -293,7 +293,7 @@ int main()
     //输出树的宽度
     puts("Max_Width:");
     cout << Get_MaxWidth(Root) << endl;
-    
+
     return 0;
 }
 //ABDH##I##E##CF#J##G##

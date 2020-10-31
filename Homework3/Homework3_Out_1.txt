@@ -1,0 +1,33 @@
+Your Tree:
+ABC       
+BDE       
+DHI       
+H##       
+I##
+E##
+CFG
+F#J
+J##
+G##
+PreOrder_WithRecursion:
+A B D H I E C F J G 
+PreOrder_WithoutRecursion:
+A B D H I E C F J G
+
+InOrder_WithRecursion:
+H D I B E A F J C G 
+InOrder_WithoutRecursion:
+H D I B E A F J C G
+
+PostOrder_WithRecursion:
+H I D E B J F G C A
+PostOrder_WithoutRecursion:
+H I D E B J F G C A
+
+LeverOrder:
+A B C D E F G H I J
+
+Complete_Tree?
+NO
+Max_Width:
+4
