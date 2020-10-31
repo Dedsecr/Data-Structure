@@ -7,6 +7,7 @@
 #include <queue>
 #include <map>
 #include <vector>
+#include <cmath>
 using namespace std;
 const int MAXN = 50;
 string OriginalText;
@@ -195,30 +196,36 @@ void GetHuffmanCode(Tree Root)
     GetMap(Code);
     PrintHC(Code);
 }
-void Encode()
+int Encode()
 {
+    int Res = 0;
     int Length = OriginalText.length();
     for(int i = 0; i < Length; ++i)
     {
+        Res += HFCMap[OriginalText[i]].length();
         cout << HFCMap[OriginalText[i]];
     }
     puts("");
+    return Res;
 }
-void GetCompressionRatio()
+void GetCompressionRatio(int Length_After)
 {
-    
+    int Width_Before = 8, Width_After = ceil(log2(1.0 * ChildNum));
+    double Ratio = 1.0 * Width_After * Length_After / Width_Before * 100 / OriginalText.length();
+    printf("Compression Ratio:\n%.3lf%%\n", Ratio);
 }
 int main()
 {
     freopen("Expriment2_In.txt", "r", stdin);
     freopen("Expriment2_Out.txt", "w", stdout);
 
-    ChildNum = 3;
+    ChildNum = 2;
     
     Text text = GetFrequency();
     PrintFrequency(text);
     Tree T = BuildHuffmanTree(text);
     GetHuffmanCode(T);
-    Encode();
+    int Length_After = Encode();
+    GetCompressionRatio(Length_After);
     return 0;
 }
