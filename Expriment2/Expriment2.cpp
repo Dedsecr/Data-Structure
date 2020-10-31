@@ -60,26 +60,78 @@ struct Cmp
         return a->Val > b->Val;
     }
 };
-priority_queue<Tree, vector<Tree>, Cmp> Q;
-/*int CalcWPL(Tree &T1, Tree &T2)
+
+class Priority_Queue
 {
-    return T1->WPL + T2->WPL + T1->Val + T2->Val;
-}
-int CalcWPL(Tree &T)
-{
-    return T->WPL + T->Val;
-}*/
-/*
-int CalcVal(Tree &T1, Tree &T2)
-{
-    return T1->Val + T2->Val;
-}
-Tree MergeTrees(Tree &T1,Tree &T2)
-{
-    Tree T = new TreeNode;
-    //T->WPL = CalcWPL(T1, T2);
-    T->Val = CalcVal(T1, T2);
-}*/
+private:
+    Tree Heap[MAXN << 2];
+    int Last;
+
+public:
+    Priority_Queue()
+    {
+        Last = 0;
+    }
+    bool empty()
+    {
+        return !Last;
+    }
+    int size()
+    {
+        return Last;
+    }
+    void push(Tree x)
+    {
+        Heap[++Last] = x;
+        int Pos = Last;
+        while(Pos > 1)
+        {
+            if(Heap[Pos >> 1]->Val > Heap[Pos]->Val)
+                swap(Heap[Pos >> 1], Heap[Pos]);
+            Pos >>= 1;
+        }
+    }
+    Tree top()
+    {
+        return Heap[1];
+    }
+    void pop()
+    {
+        if(!Last)
+        {
+            cerr << "Error in" << __LINE__;
+            exit(-1);
+        }
+        swap(Heap[1], Heap[Last]);
+        Last--;
+        if(Last == 0)
+            return;
+        int Pos = 1;
+        while(Last >= (Pos << 1))
+        {
+            if((Pos << 1 | 1) <= Last)
+            {
+                if(Heap[Pos]->Val > min(Heap[Pos << 1]->Val, Heap[Pos << 1 | 1]->Val))
+                {
+                    if(Heap[Pos << 1]->Val < Heap[Pos << 1 | 1]->Val)
+                        swap(Heap[Pos << 1], Heap[Pos]), Pos <<= 1;
+                    else swap(Heap[Pos << 1 | 1], Heap[Pos]), Pos = Pos << 1 | 1;
+                }
+                else
+                    break;
+            }
+            else
+            {
+                if(Heap[Pos]->Val > Heap[Pos << 1]->Val)
+                    swap(Heap[Pos << 1], Heap[Pos]), Pos <<= 1;
+                else
+                    break;
+            }
+        }
+    }
+};
+Priority_Queue Q;
+//priority_queue<Tree, vector<Tree>, Cmp> Q;
 Tree BuildHuffmanTree(Text &text)
 {
     while (!Q.empty())
@@ -219,7 +271,7 @@ int main()
     freopen("Expriment2_In.txt", "r", stdin);
     freopen("Expriment2_Out.txt", "w", stdout);
 
-    ChildNum = 2;
+    ChildNum = 32;
     
     Text text = GetFrequency();
     PrintFrequency(text);
