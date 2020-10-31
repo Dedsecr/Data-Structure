@@ -1,40 +1,63 @@
-## 作业2-2
+## 作业3
 
-**迷宫问题求解** 
+**二叉树存储结构的建立、遍历和应用**
 
-一个迷宫可以看成是由 $n×m$ 个房间组成的矩形，迷宫内部的每个房间有 $8$ 个方向，每个方向或者有障碍（如墙）而不能通过，或者无障碍（如有门）而能 通过。入口为左上角房间，出口为右下角房间，问是否有简单路径从入口到出口， 若有则输出一条这样的路径；否则，提示“迷宫无入口到出口的路经”。 
+树型结构的遍历是树型结构算法的基础，本实验要求编写程序演示二叉树的存储结构的建立方法、遍历过程以及应用。
 
 
 
 ### 存储结构
 
 ```cpp
-const int MAXN = 1e2 + 10;
-struct MAP
+struct TreeNode
 {
-    int n, m;
-    int map[MAXN][MAXN];
-    int Visited[MAXN][MAXN];
+    char data;
+    bool vis;
+    TreeNode * LCh;
+    TreeNode * RCh;
+    TreeNode()
+    {
+        this->LCh = NULL;
+        this->RCh = NULL;
+    }
 };
+typedef TreeNode * Tree;
+typedef TreeNode * Node;
 ```
 
 
 
 ### 函数说明
 
-1. 设计一个迷宫及其障碍的表示方式，并能随机或手动生成迷宫。
-`GenerateNewMapRandomly(int n, int m)` 随机生成一个 $n\times m$ 的迷宫, `0` 与 `1` 比例为 $4:1$ 。
-`GenerateNewMapManually(int n, int m)` 手动生成一个 $n\times m$ 的迷宫。
-2. 设计并实现一个非递归的算法，输出从入口到出口的一条路径（如存在）。
-`bool FindWithoutRecursion(MAP &Map)` 非递归地在迷宫 `Map` 中找到一条路径，若有则返回 `1` ，否则返回 `0` 。
-3. 设计并实现一个递归的算法，找出从入口到出口的一条路径（如存在）。
-`bool FindWithRecursion(Map &Map)` 递归地在迷宫 `Map` 中找到一条路径，若有则返回 `1` ，否则返回 `0` 。
-4. 如果有多条路径，设计并实现一个算法找到步数最少的路径（捷径）。
-`bool FindTheShortest(MAP &Map)` 在迷宫 `Map` 中找到一条最短的路径，若有则返回 `1` ，否则返回 `0` 。
-5. 如果有多条路径，设计并实现一个算法找到所有路径。
-`void FindAll(MAP &Map)` 递归地在迷宫 `Map` 中找到所有简单路径。
-6. 以文件方式保存、并显示原始数据和结果。
-`freopen("Homework2_Out.txt", "w", stdout)`
+1. 编写建立二叉树的二叉链表存储结构（左右链表示）的程序，并以适当的形式显示和保存二叉树；
+
+  `Tree InputTree()` 按照**先序序列**建立二叉树。 
+
+  `void PrintTree(Tree &Root)` 打印根为 `Root` 的树，共 $n$ 行，**每行输出该节点、该节点左儿子、该节点右儿子，若无儿子则输出 `#`** 。
+
+2. 采用二叉树的二叉链表存储结构，编写程序实现二叉树的先序、中序和后序遍历的递归和非递归算法以及层序遍历算法，并以适当的形式显示和保存二叉树及其相应的遍历序列；
+
+  `void Get_PreOrder_WithRecursion(Tree &Root)` 用递归实现输出先序遍历序列。
+
+  `void Get_InOrder_WithRecursion(Tree &Root)` 用递归实现输出中序遍历序列。
+
+  `void Get_PostOrder_WithRecursion(Tree &Root)` 用递归实现输出后序遍历序列。
+
+  `void Get_PreOrder_WithoutRecursion(Tree &Root)` 用非递归实现输出先序遍历序列。
+
+  `void Get_InOrder_WithoutRecursion(Tree &Root)` 用非递归实现输出中序遍历序列。
+
+  `void Get_PostOrder_WithoutRecursion(Tree &Root)` 用非递归实现输出后序遍历序列。
+
+  `void Get_LeverOrder(Tree &Root)` 输出层序遍历序列。
+
+3. 设计并实现判断任意一棵二叉树是否为完全二叉树的算法。
+
+  `bool Is_CompleteTree(Tree &Root)` 判断根为 `Root` 的树是否为完全二叉树。
+
+4. 设计并实现计算任意一棵二叉树的宽度的（递归或非递归）算法。二叉树的宽度是指其各层结点数的最大值。
+
+  `int Get_MaxWidth(Tree &Root)` 输出根为 `Root` 的树的宽度。
 
 
 
@@ -46,13 +69,7 @@ struct MAP
 
 **下述程序均为文件输入输出。**
 
-源程序 `Homework2.cpp` 中提供测试函数`void Test_GenerateNewMapRandomly(int n, int m)`，`void Test_GenerateNewMapManually(int n, int m)` ，`n` 和 `m` 需要根据输入的地图长宽而变化。
 
-为方便测试，另提供两个源程序 `Homework2_GenerateNewMapRandomly.cpp` 和 `Homework2_GenerateNewMapManually.cpp` ，分别含有测试函数`void Test_GenerateNewMapRandomly(int n, int m)` 和 `void Test_GenerateNewMapManually(int n, int m)` ，前者是随机生成迷宫，后者是手动生成迷宫。
-
-另提供由 `Homework2_GenerateNewMapRandomly.cpp` 产生的运行结果（由于随机性，每次运行产生的结果不同） `Homework2_GenerateNewMapRandomly_Out.txt`。
-
-另提供 `Homework2_GenerateNewMapManually.cpp` 的输入数据 `Homework2_GenerateNewMapManually_In.txt` 和产生的运行结果`Homework2_GenerateNewMapManually_Out.txt` 。
 
 
 

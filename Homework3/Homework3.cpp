@@ -21,6 +21,7 @@ struct TreeNode
 };
 typedef TreeNode * Tree;
 typedef TreeNode * Node;
+//按照先序序列建立二叉树的递归过程
 void BuildTree(string &S, Tree &Root, int &P)
 {
     if(P == S.length())
@@ -43,6 +44,7 @@ void BuildTree(string &S, Tree &Root, int &P)
     else
         P++;
 }
+//按照先序序列建立二叉树
 Tree InputTree()
 {
     string S;
@@ -52,6 +54,7 @@ Tree InputTree()
     BuildTree(S, Root, P);
     return Root;
 }
+//用递归实现输出先序遍历序列
 void Get_PreOrder_WithRecursion(Tree &Root)
 {
     cout << Root->data << " ";
@@ -60,6 +63,7 @@ void Get_PreOrder_WithRecursion(Tree &Root)
     if(Root->RCh != NULL)
         Get_PreOrder_WithRecursion(Root->RCh);    
 }
+//用递归实现输出中序遍历序列
 void Get_InOrder_WithRecursion(Tree &Root)
 {
     if(Root->LCh != NULL)
@@ -68,6 +72,7 @@ void Get_InOrder_WithRecursion(Tree &Root)
     if(Root->RCh != NULL)
         Get_InOrder_WithRecursion(Root->RCh);    
 }
+//用递归实现输出后序遍历序列
 void Get_PostOrder_WithRecursion(Tree &Root)
 {
     if(Root->LCh != NULL)
@@ -76,6 +81,7 @@ void Get_PostOrder_WithRecursion(Tree &Root)
         Get_PostOrder_WithRecursion(Root->RCh);
     cout << Root->data << " ";
 }
+//清除Vis标记
 void Ini_vis(Tree &Root)
 {
     Root->vis = 0;
@@ -84,6 +90,7 @@ void Ini_vis(Tree &Root)
     if(Root->RCh != NULL)
         Ini_vis(Root->RCh);  
 }
+//用非递归实现输出先序遍历序列
 void Get_PreOrder_WithoutRecursion(Tree &Root)
 {
     Ini_vis(Root);
@@ -110,6 +117,7 @@ void Get_PreOrder_WithoutRecursion(Tree &Root)
     }
     puts("");
 }
+//用非递归实现输出中序遍历序列
 void Get_InOrder_WithoutRecursion(Tree &Root)
 {
     Ini_vis(Root);
@@ -131,6 +139,7 @@ void Get_InOrder_WithoutRecursion(Tree &Root)
     }
     puts("");
 }
+//用非递归实现输出后序遍历序列
 void Get_PostOrder_WithoutRecursion(Tree &Root)
 {
     Ini_vis(Root);
@@ -152,6 +161,7 @@ void Get_PostOrder_WithoutRecursion(Tree &Root)
     }
     puts("");
 }
+//输出层序遍历序列
 void Get_LeverOrder(Tree &Root)
 {
     queue<Tree>Q;
@@ -168,6 +178,7 @@ void Get_LeverOrder(Tree &Root)
     }
     puts("");
 }
+//判断树是否为完全二叉树的深搜过程
 int Is_CompleteTree_DFS(Tree &Root, int Depth, bool &Is)
 {
     if(!Root->LCh && Root->RCh)
@@ -194,21 +205,15 @@ int Is_CompleteTree_DFS(Tree &Root, int Depth, bool &Is)
         return LDepth;
     }
 }
-void Clear_Vis(Tree &Root)
-{
-    Root->vis = 0;
-    if(Root->LCh != NULL)
-        Clear_Vis(Root->LCh);
-    if(Root->RCh != NULL)
-        Clear_Vis(Root->RCh);
-}
+//判断树是否为完全二叉树
 bool Is_CompleteTree(Tree &Root)
 {
     bool Res = 1;
-    Clear_Vis(Root);
+    Ini_vis(Root);
     Is_CompleteTree_DFS(Root, 1, Res);
     return Res;
 }
+//输出层序遍历序列的深搜过程。
 void Get_MaxWidth_DFS(Tree &Root, int * Width, int Depth)
 {
     Width[Depth]++;
@@ -217,6 +222,7 @@ void Get_MaxWidth_DFS(Tree &Root, int * Width, int Depth)
     if(Root->RCh != NULL)
         Get_MaxWidth_DFS(Root->RCh, Width, Depth + 1);
 }
+//输出层序遍历序列
 int Get_MaxWidth(Tree &Root)
 {
     int Width[MAXN] = {0}, Res = 0;
@@ -225,6 +231,7 @@ int Get_MaxWidth(Tree &Root)
         Res = max(Res, Width[i]);
     return Res;
 }
+//打印根为Root的树，共n行，每行输出该节点、该节点左儿子、该节点右儿子，若无儿子则输出#
 void PrintTree(Tree &Root)
 {
     cout << Root->data;
@@ -243,12 +250,14 @@ void PrintTree(Tree &Root)
 }
 int main()
 {
-    freopen("Homework3_In.txt", "r", stdin);
+    //输入二叉树
     Tree Root = InputTree();
 
+    //输出二叉树，共n行，每行输出该节点、该节点左儿子、该节点右儿子，若无儿子则输出#
     puts("Your Tree:");
     PrintTree(Root);
     
+    //分别用递归和非递归实现输出先序遍历序列
     puts("PreOrder_WithRecursion:");
     Get_PreOrder_WithRecursion(Root);
     cout << '\n';
@@ -256,6 +265,7 @@ int main()
     Get_PreOrder_WithoutRecursion(Root);
     cout << '\n';
     
+    //分别用递归和非递归实现输出中序遍历序列
     puts("InOrder_WithRecursion:");
     Get_InOrder_WithRecursion(Root);
     cout << '\n';
@@ -263,10 +273,7 @@ int main()
     Get_InOrder_WithoutRecursion(Root);
     cout << '\n';
 
-    puts("LeverOrder:");
-    Get_LeverOrder(Root);
-    cout << '\n';
-
+    //分别用递归和非递归实现输出后序遍历序列
     puts("PostOrder_WithRecursion:");
     Get_PostOrder_WithRecursion(Root);
     cout << '\n';
@@ -274,9 +281,16 @@ int main()
     Get_PostOrder_WithoutRecursion(Root);
     cout << '\n';
 
-    puts("Complete_Tree?");
-    cout << Is_CompleteTree(Root) << endl;
+    //输出层序遍历序列
+    puts("LeverOrder:");
+    Get_LeverOrder(Root);
+    cout << '\n';
 
+    //判断树是否为完全二叉树
+    puts("Complete_Tree?");
+    cout << (Is_CompleteTree(Root) ? "YES" : "NO") << endl;
+
+    //输出树的宽度
     puts("Max_Width:");
     cout << Get_MaxWidth(Root) << endl;
     
