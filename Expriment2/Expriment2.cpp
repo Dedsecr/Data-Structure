@@ -11,6 +11,7 @@
 using namespace std;
 const int MAXN = 50;
 string OriginalText;
+string EncodedText;
 struct Text
 {
     int Length;
@@ -33,6 +34,7 @@ struct HuffmanCode
 };
 
 map<char, string>HFCMap;
+map<string, char>HFCMap_Reverse;
 
 int Stack[MAXN], StackP;
 int ChildNum = 2;
@@ -164,9 +166,9 @@ Tree BuildHuffmanTree(Text &text)
 Text GetFrequency()
 {
     Text Res;
-    string now;
+    char now;
     OriginalText = "";
-    while (getline(cin, now))
+    while ((now = getchar()) != EOF)
     {
         OriginalText += now;
     }
@@ -187,6 +189,19 @@ char HCInt2Char(int x)
     if(x < 10)
         return x + '0';
     return x - 10 + 'A';
+}
+string CharForOutput(char x)
+{
+    string Res = "";
+    if(x == '\n')
+        Res = "\'\\n\'";
+    else 
+    {
+        Res = "\'";
+        Res += x;
+        Res += "\'";
+    }
+    return Res;
 }
 void GetHC(Tree Root, HuffmanCode *Code)
 {
@@ -218,7 +233,7 @@ void PrintHC(HuffmanCode *Code)
     int Size = Code->Code.size();
     for (int i = 0; i < Size; ++i)
     {
-        cout << Code->Code[i].Text << " : " << Code->Code[i].Code << '\n';
+        cout << CharForOutput(Code->Code[i].Text) << " : " << Code->Code[i].Code << endl;
     }
 }
 void PrintFrequency(Text &text)
@@ -227,7 +242,7 @@ void PrintFrequency(Text &text)
     {
         if (abs(text.Frequency[i]) > 1e-8)
         {
-            cout << char(i) << " : " << text.Frequency[i] << endl;
+            cout << CharForOutput(char(i)) << " : " << text.Frequency[i] << endl;
         }
     }
     puts("");
@@ -238,6 +253,7 @@ void GetMap(HuffmanCode *Code)
     for (int i = 0; i < Size; ++i)
     {
         HFCMap[Code->Code[i].Text] = Code->Code[i].Code;
+        HFCMap_Reverse[Code->Code[i].Code] = Code->Code[i].Text;
     }
 }
 void GetHuffmanCode(Tree Root)
@@ -250,15 +266,31 @@ void GetHuffmanCode(Tree Root)
 }
 int Encode()
 {
+    EncodedText = "";
     int Res = 0;
     int Length = OriginalText.length();
     for(int i = 0; i < Length; ++i)
     {
         Res += HFCMap[OriginalText[i]].length();
-        cout << HFCMap[OriginalText[i]];
+        EncodedText += HFCMap[OriginalText[i]];
+    }
+    cout << EncodedText << '\n';
+    return Res;
+}
+void Decode()
+{
+    string now = "";
+    int Length = EncodedText.length();
+    for(int i = 0; i < Length; ++i)
+    {
+        now += EncodedText[i];
+        if(HFCMap_Reverse[now])
+        {
+            cout << HFCMap_Reverse[now];
+            now = "";
+        }
     }
     puts("");
-    return Res;
 }
 void GetCompressionRatio(int Length_After)
 {
@@ -275,9 +307,14 @@ int main()
     
     Text text = GetFrequency();
     PrintFrequency(text);
+    puts("");
     Tree T = BuildHuffmanTree(text);
     GetHuffmanCode(T);
+    puts("");
     int Length_After = Encode();
+    puts("");
+    Decode();
+    puts("");
     GetCompressionRatio(Length_After);
     return 0;
 }
