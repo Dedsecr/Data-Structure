@@ -298,12 +298,13 @@ void GetCompressionRatio(int Length_After)
     double Ratio = 1.0 * Width_After * Length_After / Width_Before * 100 / OriginalText.length();
     printf("Compression Ratio:\n%.3lf%%\n", Ratio);
 }
+
 int main()
 {
     freopen("Expriment2_In.txt", "r", stdin);
     freopen("Expriment2_Out.txt", "w", stdout);
 
-    ChildNum = 32;
+    ChildNum = 2;
     
     Text text = GetFrequency();
     PrintFrequency(text);
