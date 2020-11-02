@@ -271,7 +271,7 @@ int main()
     freopen("Expriment2_In.txt", "r", stdin);
     freopen("Expriment2_Out.txt", "w", stdout);
 
-    ChildNum = 32;
+    ChildNum = 2;
     
     Text text = GetFrequency();
     PrintFrequency(text);
