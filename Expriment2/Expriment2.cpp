@@ -40,14 +40,12 @@ int Stack[MAXN], StackP;
 int ChildNum = 2;
 struct TreeNode
 {
-    //int WPL;
     char Text;
     double Val;
     vector<TreeNode *> Ch;
     TreeNode()
     {
         Text = 0;
-        //WPL = 0;
         Val = 0;
         Ch.clear();
     }
@@ -55,14 +53,7 @@ struct TreeNode
 
 typedef TreeNode *Tree;
 typedef TreeNode *Node;
-struct Cmp
-{
-    bool operator()(const Tree a, const Tree b)
-    {
-        return a->Val > b->Val;
-    }
-};
-
+//小根堆
 class Priority_Queue
 {
 private:
@@ -133,7 +124,7 @@ public:
     }
 };
 Priority_Queue Q;
-//priority_queue<Tree, vector<Tree>, Cmp> Q;
+//建立哈夫曼树
 Tree BuildHuffmanTree(Text &text)
 {
     while (!Q.empty())
@@ -163,6 +154,7 @@ Tree BuildHuffmanTree(Text &text)
     }
     return Q.top();
 }
+//输入并计算频率
 Text GetFrequency()
 {
     Text Res;
@@ -203,6 +195,7 @@ string CharForOutput(char x)
     }
     return Res;
 }
+//遍历哈夫曼树以计算哈夫曼编码
 void GetHC(Tree Root, HuffmanCode *Code)
 {
     int Size = Root->Ch.size();
@@ -228,6 +221,7 @@ void GetHC(Tree Root, HuffmanCode *Code)
         StackP--;
     }
 }
+//打印哈夫曼编码
 void PrintHC(HuffmanCode *Code)
 {
     int Size = Code->Code.size();
@@ -236,6 +230,7 @@ void PrintHC(HuffmanCode *Code)
         cout << CharForOutput(Code->Code[i].Text) << " : " << Code->Code[i].Code << endl;
     }
 }
+//输出频率
 void PrintFrequency(Text &text)
 {
     for (int i = 0; i < 126; ++i)
@@ -247,6 +242,7 @@ void PrintFrequency(Text &text)
     }
     puts("");
 }
+
 void GetMap(HuffmanCode *Code)
 {
     int Size = Code->Code.size();
@@ -256,6 +252,7 @@ void GetMap(HuffmanCode *Code)
         HFCMap_Reverse[Code->Code[i].Code] = Code->Code[i].Text;
     }
 }
+//计算哈夫曼编码并输出
 void GetHuffmanCode(Tree Root)
 {
     HuffmanCode *Code = new HuffmanCode;
@@ -264,6 +261,7 @@ void GetHuffmanCode(Tree Root)
     GetMap(Code);
     PrintHC(Code);
 }
+//编码
 int Encode()
 {
     EncodedText = "";
@@ -277,6 +275,7 @@ int Encode()
     cout << EncodedText << '\n';
     return Res;
 }
+//解码
 void Decode()
 {
     string now = "";
@@ -292,6 +291,7 @@ void Decode()
     }
     puts("");
 }
+//求压缩率
 void GetCompressionRatio(int Length_After)
 {
     int Width_Before = 8, Width_After = ceil(log2(1.0 * ChildNum));
