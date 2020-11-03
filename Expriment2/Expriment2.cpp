@@ -309,13 +309,17 @@ int main()
     Text text = GetFrequency();
     PrintFrequency(text);
     puts("");
+    
     Tree T = BuildHuffmanTree(text);
     GetHuffmanCode(T);
     puts("");
+
     int Length_After = Encode();
     puts("");
+
     Decode();
     puts("");
+
     GetCompressionRatio(Length_After);
     return 0;
 }
