@@ -15,11 +15,11 @@ string EncodedText;
 struct Text
 {
     int Length;
-    double Frequency[126];
+    double Frequency[128];
     Text()
     {
         Length = 0;
-        for (int i = 0; i < 126; ++i)
+        for (int i = 0; i < 128; ++i)
             Frequency[i] = 0;
     }
 };
@@ -58,25 +58,25 @@ class Priority_Queue
 {
 private:
     Tree Heap[MAXN << 2];
-    int Last;
+    int Length;
 
 public:
     Priority_Queue()
     {
-        Last = 0;
+        Length = 0;
     }
     bool empty()
     {
-        return !Last;
+        return !Length;
     }
     int size()
     {
-        return Last;
+        return Length;
     }
     void push(Tree x)
     {
-        Heap[++Last] = x;
-        int Pos = Last;
+        Heap[++Length] = x;
+        int Pos = Length;
         while(Pos > 1)
         {
             if(Heap[Pos >> 1]->Val > Heap[Pos]->Val)
@@ -90,19 +90,19 @@ public:
     }
     void pop()
     {
-        if(!Last)
+        if(!Length)
         {
             cerr << "Error in" << __LINE__;
             exit(-1);
         }
-        swap(Heap[1], Heap[Last]);
-        Last--;
-        if(Last == 0)
+        swap(Heap[1], Heap[Length]);
+        Length--;
+        if(Length == 0)
             return;
         int Pos = 1;
-        while(Last >= (Pos << 1))
+        while(Length >= (Pos << 1))
         {
-            if((Pos << 1 | 1) <= Last)
+            if((Pos << 1 | 1) <= Length)
             {
                 if(Heap[Pos]->Val > min(Heap[Pos << 1]->Val, Heap[Pos << 1 | 1]->Val))
                 {
@@ -129,7 +129,7 @@ Tree BuildHuffmanTree(Text &text)
 {
     while (!Q.empty())
         Q.pop();
-    for (int i = 0; i < 126; ++i)
+    for (int i = 0; i < 128; ++i)
         if (abs(text.Frequency[i]) > 1e-8)
         {
             Tree T = new TreeNode;
@@ -154,8 +154,8 @@ Tree BuildHuffmanTree(Text &text)
     }
     return Q.top();
 }
-//输入并计算频率
-Text GetFrequency()
+//输入文本并计算频率
+Text GetTextandFrequency()
 {
     Text Res;
     char now;
@@ -170,7 +170,7 @@ Text GetFrequency()
     {
         Res.Frequency[OriginalText[i]] += 1;
     }
-    for (int i = 0; i < 126; ++i)
+    for (int i = 0; i < 128; ++i)
     {
         Res.Frequency[i] /= Length;
     }
@@ -233,7 +233,7 @@ void PrintHC(HuffmanCode *Code)
 //输出频率
 void PrintFrequency(Text &text)
 {
-    for (int i = 0; i < 126; ++i)
+    for (int i = 0; i < 128; ++i)
     {
         if (abs(text.Frequency[i]) > 1e-8)
         {
@@ -252,7 +252,7 @@ void GetMap(HuffmanCode *Code)
         HFCMap_Reverse[Code->Code[i].Code] = Code->Code[i].Text;
     }
 }
-//计算哈夫曼编码并输出
+//计算每个字符的哈夫曼编码并输出
 void GetHuffmanCode(Tree Root)
 {
     HuffmanCode *Code = new HuffmanCode;
@@ -261,7 +261,7 @@ void GetHuffmanCode(Tree Root)
     GetMap(Code);
     PrintHC(Code);
 }
-//编码
+//编码并输出编码后文本
 int Encode()
 {
     EncodedText = "";
@@ -275,7 +275,7 @@ int Encode()
     cout << EncodedText << '\n';
     return Res;
 }
-//解码
+//解码并输出解码后文本
 void Decode()
 {
     string now = "";
@@ -306,7 +306,7 @@ int main()
 
     ChildNum = 2;
     
-    Text text = GetFrequency();
+    Text text = GetTextandFrequency();
     PrintFrequency(text);
     puts("");
     
