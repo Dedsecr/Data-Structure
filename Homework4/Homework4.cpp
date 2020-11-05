@@ -11,6 +11,13 @@
 using namespace std;
 const int MAXN = 50;
 
+struct Result
+{
+    vector<int>Sequence;
+    int ID[MAXN];
+    vector<int>TreeMatrix[MAXN];
+};
+
 class AdjacencyMatrix
 {
 private:
@@ -49,6 +56,7 @@ class AdjacencyList
 {
 private:
     vector<int>List[MAXN];
+    bool Visited[MAXN];
     int n, m;//节点的数量和边的数量 
 
 public:
@@ -82,6 +90,50 @@ public:
             Insert(x, y);
             Insert(y, x);
         }
+    }
+    void DFS(int x,int &Count, Result &Res)
+    {
+        Visited[x] = 1;
+        Res.ID[x] = ++Count;
+        Res.Sequence.push_back(x);
+        int Size = GetListSize(x);
+        for (int i = 0; i < Size; ++i)
+        {
+            int To = GetListEle(x, i);
+            if(!Visited[To])
+            {
+                Res.TreeMatrix[x].push_back(To);
+                DFS(To, Count, Res);
+            }
+        }
+    }
+    Result DFSWithRecursion()
+    {
+        Result Res;
+        int Count = 0;
+        for(int i = 0; i < MAXN; ++i)
+            Visited[i] = 0;
+        for(int i = 0; i < MAXN; ++i)
+            if(!Visited[i])
+                DFS(i, Count, Res);
+        
+    }
+    Result DFSWithoutRecursion()
+    {
+        Result Res;
+        stack<int>S;
+        for(int i = 0; i < MAXN; ++i)
+            Visited[i] = 0;
+        for(int i = 0; i < MAXN; ++i)
+            if(!Visited[i])
+            {
+                S.push(i);
+                while(!S.empty())
+                {
+                    
+                }
+            }
+        
     }
 };
 
