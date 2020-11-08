@@ -16,23 +16,49 @@ struct Result
     vector<int>Sequence;
     int ID[MAXN];
     vector<int>TreeMatrix[MAXN];
+    Result()
+    {
+        Sequence.clear();
+        for (int i = 0; i < MAXN; ++i)
+            TreeMatrix[i].clear();
+        memset(ID, 0, sizeof(ID));
+    }
+    void Print() 
+    {
+        puts("Sequence:");
+        int Size = Sequence.size();
+        for (int i = 0; i < Size; ++i)
+            cout << Sequence[i] << " ";
+        puts("");
+
+        puts("ID:");
+        puts("Node  ID");
+        for (int i = 0; i < MAXN; ++i)
+            if(ID[i])
+                cout << i << " : " << ID[i] << "\n";
+        puts("");
+    }
 };
 
 class AdjacencyMatrix
 {
 private:
     int Matrix[MAXN][MAXN];
-    bool Visited[MAXN];
+    bool Visited[MAXN], Appeared[MAXN];
     int n, m;//节点的数量和边的数量 
 
 public:
-    AdjacencyMatrix(){}
-    AdjacencyMatrix(int _n, int _m)
+    AdjacencyMatrix()
+    {
+        memset(Matrix, 0, sizeof(Matrix));
+        memset(Appeared, 0, sizeof(Appeared));
+    }
+    /*AdjacencyMatrix(int _n, int _m)
     {
         n = _n;
         m = _m;
-        memset(Matrix, 0, sizeof(Matrix));
-    }
+        
+    }*/
     void Initialization()
     {
         for(int i = 0; i < MAXN; ++i)
@@ -80,9 +106,9 @@ public:
         int Count = 0;
         Initialization();
         for(int i = 0; i < MAXN; ++i)
-            if(!Visited[i])
+            if(!Visited[i] && Appeared[i])
                 DFS(i, Count, Res);
-        
+        return Res;
     }
     Result DFSWithoutRecursion()
     {
@@ -115,6 +141,7 @@ public:
                     }
                 }
             }
+        return Res;
     }
     Result BFSWithoutRecursion()
     {
@@ -147,6 +174,7 @@ public:
                     }
                 }
             }
+        return Res;
     }
 };
 class AdjacencyList
@@ -156,20 +184,28 @@ private:
     {
         int To;
         Node *Next;
+        Node()
+        {
+            Next = NULL;
+        }
     };
     Node *List[MAXN];
-    bool Visited[MAXN];
+    bool Visited[MAXN], Appeared[MAXN];
     int n, m;//节点的数量和边的数量
 
 public:
-    AdjacencyList(){}
-    AdjacencyList(int _n, int _m)
+    AdjacencyList()
+    {
+        for (int i = 0; i < MAXN; ++i)
+            List[i] = NULL, Appeared[i] = 0;
+    }
+    /*AdjacencyList(int _n, int _m)
     {
         n = _n;
         m = _m;
         for (int i = 0; i < MAXN; ++i)
             List[i] = NULL;
-    }
+    }*/
     void Initialization()
     {
         for(int i = 0; i < MAXN; ++i)
@@ -201,6 +237,8 @@ public:
     }
     void Insert(int x, int y)
     {
+        Appeared[x] = 1;
+        Appeared[y] = 1;
         Node* now = List[x];
         while(now->Next != NULL)
             now = now->Next;
@@ -241,9 +279,9 @@ public:
         int Count = 0;
         Initialization();
         for(int i = 0; i < MAXN; ++i)
-            if(!Visited[i])
+            if(!Visited[i] && Appeared[i])
                 DFS(i, Count, Res);
-        
+        return Res;
     }
     Result DFSWithoutRecursion()
     {
@@ -275,6 +313,7 @@ public:
                     }
                 }
             }
+        return Res;
     }
     Result BFSWithoutRecursion()
     {
@@ -306,6 +345,7 @@ public:
                     }
                 }
             }
+        return Res;
     }
 };
 
@@ -333,6 +373,17 @@ AdjacencyList Transformer_Matrix2List(AdjacencyMatrix AM)
 }
 int main()
 {
-    
+    AdjacencyMatrix AM;
+    AM.InputandBuild();
+    Result R = AM.DFSWithRecursion();
+    R.Print();
     return 0;
 }
+/*
+5 5
+1 2
+1 3
+2 4
+3 4
+4 5
+*/
