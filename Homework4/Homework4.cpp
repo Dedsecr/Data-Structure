@@ -22,6 +22,7 @@ class AdjacencyMatrix
 {
 private:
     int Matrix[MAXN][MAXN];
+    bool Visited[MAXN];
     int n, m;//节点的数量和边的数量 
 
 public:
@@ -31,6 +32,11 @@ public:
         n = _n;
         m = _m;
         memset(Matrix, 0, sizeof(Matrix));
+    }
+    void Initialization()
+    {
+        for(int i = 0; i < MAXN; ++i)
+            Visited[i] = 0;
     }
     int GetMatrixEle(int x, int y)
     {
@@ -51,13 +57,109 @@ public:
             Insert(y, x);
         }
     }
+    void DFS(int x,int &Count, Result &Res)
+    {
+        Visited[x] = 1;
+        Res.ID[x] = ++Count;
+        Res.Sequence.push_back(x);
+        for (int i = 0; i < MAXN; ++i)
+        {
+            if(!Matrix[x][i])
+                continue;
+            int To = GetMatrixEle(x, i);
+            if(!Visited[To])
+            {
+                Res.TreeMatrix[x].push_back(To);
+                DFS(To, Count, Res);
+            }
+        }
+    }
+    Result DFSWithRecursion()
+    {
+        Result Res;
+        int Count = 0;
+        Initialization();
+        for(int i = 0; i < MAXN; ++i)
+            if(!Visited[i])
+                DFS(i, Count, Res);
+        
+    }
+    Result DFSWithoutRecursion()
+    {
+        Result Res;
+        stack<int>S;
+        Initialization();
+        int Count = 0;
+        for(int Now = 0; Now < MAXN; ++Now)
+            if(!Visited[Now])
+            {
+                S.push(Now);
+                Visited[Now] = 1;
+                while(!S.empty())
+                {
+                    int x = S.top();
+                    S.pop();
+                    Res.ID[x] = ++Count;
+                    Res.Sequence.push_back(x);
+                    for (int i = 0; i < MAXN; ++i)
+                    {
+                        if(!Matrix[x][i])
+                            continue;
+                        int To = GetMatrixEle(x, i);
+                        if(!Visited[To])
+                        {
+                            Res.TreeMatrix[x].push_back(To);
+                            Visited[To] = 1;
+                            S.push(To);
+                        }
+                    }
+                }
+            }
+    }
+    Result BFSWithoutRecursion()
+    {
+        Result Res;
+        queue<int>Q;
+        Initialization();
+        int Count = 0;
+        for(int Now = 0; Now < MAXN; ++Now)
+            if(!Visited[Now])
+            {
+                Q.push(Now);
+                Visited[Now] = 1;
+                while(!Q.empty())
+                {
+                    int x = Q.front();
+                    Q.pop();
+                    Res.ID[x] = ++Count;
+                    Res.Sequence.push_back(x);
+                    for (int i = 0; i < MAXN; ++i)
+                    {
+                        if(!Matrix[x][i])
+                            continue;
+                        int To = GetMatrixEle(x, i);
+                        if(!Visited[To])
+                        {
+                            Res.TreeMatrix[x].push_back(To);
+                            Visited[To] = 1;
+                            Q.push(To);
+                        }
+                    }
+                }
+            }
+    }
 };
 class AdjacencyList
 {
 private:
-    vector<int>List[MAXN];
+    struct Node
+    {
+        int To;
+        Node *Next;
+    };
+    Node *List[MAXN];
     bool Visited[MAXN];
-    int n, m;//节点的数量和边的数量 
+    int n, m;//节点的数量和边的数量
 
 public:
     AdjacencyList(){}
@@ -66,19 +168,45 @@ public:
         n = _n;
         m = _m;
         for (int i = 0; i < MAXN; ++i)
-            List[i].clear();
+            List[i] = NULL;
+    }
+    void Initialization()
+    {
+        for(int i = 0; i < MAXN; ++i)
+            Visited[i] = 0;
     }
     int GetListSize(int x)
     {
-        return List[x].size();
+        int Res = 0;
+        Node* now = List[x]->Next;
+        while(now != NULL)
+        {
+            Res++;
+            now = now->Next;
+        }
+        return Res;
     }
     int GetListEle(int x, int y)
     {
-        return List[x][y];
+        int Cnt = 0;
+        Node* now = List[x]->Next;
+        while(now != NULL)
+        {
+            Cnt++;
+            if(Cnt == y)
+                return now->To;
+            now = now->Next;
+        }
+        return -1;
     }
     void Insert(int x, int y)
     {
-        List[x].push_back(y);
+        Node* now = List[x];
+        while(now->Next != NULL)
+            now = now->Next;
+        now->Next = new Node;
+        now->Next->Next = NULL;
+        now->Next->To = y;
     }
     void InputandBuild()
     {
@@ -111,8 +239,7 @@ public:
     {
         Result Res;
         int Count = 0;
-        for(int i = 0; i < MAXN; ++i)
-            Visited[i] = 0;
+        Initialization();
         for(int i = 0; i < MAXN; ++i)
             if(!Visited[i])
                 DFS(i, Count, Res);
@@ -122,18 +249,63 @@ public:
     {
         Result Res;
         stack<int>S;
-        for(int i = 0; i < MAXN; ++i)
-            Visited[i] = 0;
-        for(int i = 0; i < MAXN; ++i)
-            if(!Visited[i])
+        Initialization();
+        int Count = 0;
+        for(int Now = 0; Now < MAXN; ++Now)
+            if(!Visited[Now])
             {
-                S.push(i);
+                S.push(Now);
+                Visited[Now] = 1;
                 while(!S.empty())
                 {
-                    
+                    int x = S.top();
+                    S.pop();
+                    Res.ID[x] = ++Count;
+                    Res.Sequence.push_back(x);
+                    int Size = GetListSize(x);
+                    for (int i = 0; i < Size; ++i)
+                    {
+                        int To = GetListEle(x, i);
+                        if(!Visited[To])
+                        {
+                            Res.TreeMatrix[x].push_back(To);
+                            Visited[To] = 1;
+                            S.push(To);
+                        }
+                    }
                 }
             }
-        
+    }
+    Result BFSWithoutRecursion()
+    {
+        Result Res;
+        queue<int>Q;
+        Initialization();
+        int Count = 0;
+        for(int Now = 0; Now < MAXN; ++Now)
+            if(!Visited[Now])
+            {
+                Q.push(Now);
+                Visited[Now] = 1;
+                while(!Q.empty())
+                {
+                    int x = Q.front();
+                    Q.pop();
+                    Res.ID[x] = ++Count;
+                    Res.Sequence.push_back(x);
+                    int Size = GetListSize(x);
+                    for (int i = 0; i < Size; ++i)
+                    {
+                        int To = GetListEle(x, i);
+                        if(!Visited[To])
+                        {
+                            Res.TreeMatrix[x].push_back(To);
+                            Visited[To] = 1;
+                            Q.push(To);
+                        }
+                    }
+                }
+            }
     }
 };
 
@@ -158,4 +330,9 @@ AdjacencyList Transformer_Matrix2List(AdjacencyMatrix AM)
             if(AM.GetMatrixEle(i, j))
                 Res.Insert(i, j);
     return Res;
+}
+int main()
+{
+    
+    return 0;
 }
