@@ -81,6 +81,8 @@ public:
             cin >> x >> y;
             Insert(x, y);
             Insert(y, x);
+            Appeared[x] = 1;
+            Appeared[y] = 1;
         }
     }
     void DFS(int x,int &Count, Result &Res)
@@ -90,9 +92,9 @@ public:
         Res.Sequence.push_back(x);
         for (int i = 0; i < MAXN; ++i)
         {
-            if(!Matrix[x][i])
+            if(!GetMatrixEle(x, i))
                 continue;
-            int To = GetMatrixEle(x, i);
+            int To = i;
             if(!Visited[To])
             {
                 Res.TreeMatrix[x].push_back(To);
@@ -117,7 +119,7 @@ public:
         Initialization();
         int Count = 0;
         for(int Now = 0; Now < MAXN; ++Now)
-            if(!Visited[Now])
+            if(!Visited[Now] && Appeared[Now])
             {
                 S.push(Now);
                 Visited[Now] = 1;
@@ -127,11 +129,11 @@ public:
                     S.pop();
                     Res.ID[x] = ++Count;
                     Res.Sequence.push_back(x);
-                    for (int i = 0; i < MAXN; ++i)
+                    for (int i = MAXN - 1; i >= 0; --i)
                     {
                         if(!Matrix[x][i])
                             continue;
-                        int To = GetMatrixEle(x, i);
+                        int To = i;
                         if(!Visited[To])
                         {
                             Res.TreeMatrix[x].push_back(To);
@@ -150,7 +152,7 @@ public:
         Initialization();
         int Count = 0;
         for(int Now = 0; Now < MAXN; ++Now)
-            if(!Visited[Now])
+            if(!Visited[Now] && Appeared[Now])
             {
                 Q.push(Now);
                 Visited[Now] = 1;
@@ -164,7 +166,7 @@ public:
                     {
                         if(!Matrix[x][i])
                             continue;
-                        int To = GetMatrixEle(x, i);
+                        int To = i;
                         if(!Visited[To])
                         {
                             Res.TreeMatrix[x].push_back(To);
@@ -237,8 +239,6 @@ public:
     }
     void Insert(int x, int y)
     {
-        Appeared[x] = 1;
-        Appeared[y] = 1;
         Node* now = List[x];
         while(now->Next != NULL)
             now = now->Next;
@@ -255,6 +255,8 @@ public:
             cin >> x >> y;
             Insert(x, y);
             Insert(y, x);
+            Appeared[x] = 1;
+            Appeared[y] = 1;
         }
     }
     void DFS(int x,int &Count, Result &Res)
@@ -290,7 +292,7 @@ public:
         Initialization();
         int Count = 0;
         for(int Now = 0; Now < MAXN; ++Now)
-            if(!Visited[Now])
+            if(!Visited[Now] && Appeared[Now])
             {
                 S.push(Now);
                 Visited[Now] = 1;
@@ -322,7 +324,7 @@ public:
         Initialization();
         int Count = 0;
         for(int Now = 0; Now < MAXN; ++Now)
-            if(!Visited[Now])
+            if(!Visited[Now] && Appeared[Now])
             {
                 Q.push(Now);
                 Visited[Now] = 1;
@@ -373,6 +375,7 @@ AdjacencyList Transformer_Matrix2List(AdjacencyMatrix AM)
 }
 int main()
 {
+    freopen("Homework4_In.txt","r",stdin);
     AdjacencyMatrix AM;
     AM.InputandBuild();
     Result R = AM.DFSWithRecursion();
