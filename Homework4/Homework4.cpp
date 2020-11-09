@@ -31,11 +31,10 @@ struct Result
             cout << Sequence[i] << " ";
         puts("");
 
-        puts("ID:");
         puts("Node  ID");
         for (int i = 0; i < MAXN; ++i)
             if(ID[i])
-                cout << i << " : " << ID[i] << "\n";
+                cout << "  " << i << " : " << ID[i] << "\n";
         puts("");
     }
 };
@@ -129,7 +128,7 @@ public:
                     S.pop();
                     Res.ID[x] = ++Count;
                     Res.Sequence.push_back(x);
-                    for (int i = MAXN - 1; i >= 0; --i)
+                    for (int i = 0; i < MAXN; ++i)
                     {
                         if(!Matrix[x][i])
                             continue;
@@ -199,7 +198,7 @@ public:
     AdjacencyList()
     {
         for (int i = 0; i < MAXN; ++i)
-            List[i] = NULL, Appeared[i] = 0;
+            List[i] = new Node, Appeared[i] = 0;
     }
     /*AdjacencyList(int _n, int _m)
     {
@@ -351,7 +350,7 @@ public:
     }
 };
 
-AdjacencyMatrix Transformer_List2Matrix(AdjacencyList AL)
+AdjacencyMatrix Transformer_List2Matrix(AdjacencyList &AL)
 {
     AdjacencyMatrix Res;
     for(int i = 0; i < MAXN; ++i)
@@ -364,7 +363,7 @@ AdjacencyMatrix Transformer_List2Matrix(AdjacencyList AL)
     }
     return Res;
 }
-AdjacencyList Transformer_Matrix2List(AdjacencyMatrix AM)
+AdjacencyList Transformer_Matrix2List(AdjacencyMatrix &AM)
 {
     AdjacencyList Res;
     for(int i = 0; i < MAXN; ++i)
@@ -378,8 +377,31 @@ int main()
     freopen("Homework4_In.txt","r",stdin);
     AdjacencyMatrix AM;
     AM.InputandBuild();
-    Result R = AM.DFSWithRecursion();
+    Result R;
+
+    /*R = AM.DFSWithRecursion();
     R.Print();
+
+    R = AM.DFSWithoutRecursion();
+    R.Print();
+
+    R = AM.BFSWithoutRecursion();
+    R.Print();*/
+
+
+    AdjacencyList AL;
+    cout << "**";
+    AL = Transformer_Matrix2List(AM);
+    cout << "**";
+    R = AM.DFSWithRecursion();
+    R.Print();
+
+    R = AL.DFSWithoutRecursion();
+    R.Print();
+
+    R = AL.BFSWithoutRecursion();
+    R.Print();
+    cout << "&&&";
     return 0;
 }
 /*
