@@ -70,6 +70,8 @@ public:
     void Insert(int x, int y)
     {
         Matrix[x][y] = 1;
+        Appeared[x] = 1;
+        Appeared[y] = 1;
     }
     void InputandBuild()
     {
@@ -80,8 +82,6 @@ public:
             cin >> x >> y;
             Insert(x, y);
             Insert(y, x);
-            Appeared[x] = 1;
-            Appeared[y] = 1;
         }
     }
     void DFS(int x,int &Count, Result &Res)
@@ -225,7 +225,7 @@ public:
     }
     int GetListEle(int x, int y)
     {
-        int Cnt = 0;
+        int Cnt = -1;
         Node* now = List[x]->Next;
         while(now != NULL)
         {
@@ -244,6 +244,8 @@ public:
         now->Next = new Node;
         now->Next->Next = NULL;
         now->Next->To = y;
+        Appeared[x] = 1;
+        Appeared[y] = 1;
     }
     void InputandBuild()
     {
@@ -254,8 +256,6 @@ public:
             cin >> x >> y;
             Insert(x, y);
             Insert(y, x);
-            Appeared[x] = 1;
-            Appeared[y] = 1;
         }
     }
     void DFS(int x,int &Count, Result &Res)
@@ -379,29 +379,36 @@ int main()
     AM.InputandBuild();
     Result R;
 
-    /*R = AM.DFSWithRecursion();
-    R.Print();
+    puts("AdjacencyMatrix:");
 
-    R = AM.DFSWithoutRecursion();
-    R.Print();
-
-    R = AM.BFSWithoutRecursion();
-    R.Print();*/
-
-
-    AdjacencyList AL;
-    cout << "**";
-    AL = Transformer_Matrix2List(AM);
-    cout << "**";
+    puts("DFSWithRecursion");
     R = AM.DFSWithRecursion();
     R.Print();
 
+    puts("DFSWithoutRecursion");
+    R = AM.DFSWithoutRecursion();
+    R.Print();
+
+    puts("BFSWithoutRecursion");
+    R = AM.BFSWithoutRecursion();
+    R.Print();
+
+
+    puts("AdjacencyList:");
+    AdjacencyList AL;
+    AL = Transformer_Matrix2List(AM);
+
+    puts("DFSWithRecursion");
+    R = AL.DFSWithRecursion();
+    R.Print();
+
+    puts("DFSWithoutRecursion");
     R = AL.DFSWithoutRecursion();
     R.Print();
 
+    puts("BFSWithoutRecursion");
     R = AL.BFSWithoutRecursion();
     R.Print();
-    cout << "&&&";
     return 0;
 }
 /*
