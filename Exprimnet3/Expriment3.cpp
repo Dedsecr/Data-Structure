@@ -165,6 +165,9 @@ Result_AllSource Floyd()
     return Res;
 }
 void FingPath(int x)
+{
+    
+}
 void SingleTargetShortestPath(int Target)
 {
     Result_AllSource Res = Floyd();
