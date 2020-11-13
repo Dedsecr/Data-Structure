@@ -375,6 +375,22 @@ AdjacencyList Transformer_Matrix2List(AdjacencyMatrix &AM)
 int main()
 {
     freopen("Homework4_In.txt","r",stdin);
+
+    printf("--------------------------------\n"
+           "0.Quit\n"
+           "1.Input Graph using Adjacency List\n"
+           "2.Input Graph using Adjacency Matrix\n"
+           "3.Transform List to Matrix\n"
+           "4.Transform Matrix to List\n"
+           "5.DFS List With Recursion\n"
+           "6.DFS Matrix With Recursion\n"
+           "7.DFS List Without Recursion\n"
+           "8.DFS Matrix Without Recursion\n"
+           "9.BFS List\n"
+           "10.BFS Matrix\n"
+           "--------------------------------\n"
+           "Input an Integer to Choose:\n");
+
     AdjacencyMatrix AM;
     AM.InputandBuild();
     Result R;
