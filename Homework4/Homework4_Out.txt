@@ -1,0 +1,277 @@
+--------------------------------
+0.Quit
+1.Input Graph using Adjacency List
+2.Input Graph using Adjacency Matrix
+3.Transform List to Matrix
+4.Transform Matrix to List
+5.DFS List With Recursion
+6.DFS Matrix With Recursion
+7.DFS List Without Recursion
+8.DFS Matrix Without Recursion
+9.BFS List
+10.BFS Matrix
+--------------------------------
+Input an Integer to Choose:
+0 : 1 4 
+1 : 2 
+2 : 3 5 
+3 : 7 0 
+4 : 9 
+5 : 1 
+6 : 7 3 
+7 : 11 
+8 : 11 4 
+9 : 6 
+10 : 7 
+11 : 10 
+--------------------------------
+0.Quit
+1.Input Graph using Adjacency List
+2.Input Graph using Adjacency Matrix
+3.Transform List to Matrix
+4.Transform Matrix to List
+5.DFS List With Recursion
+6.DFS Matrix With Recursion
+7.DFS List Without Recursion
+8.DFS Matrix Without Recursion
+9.BFS List
+10.BFS Matrix
+--------------------------------
+Input an Integer to Choose:
+0 1 0 0 1 0 0 0 0 0 0 
+0 0 1 0 0 0 0 0 0 0 0 
+0 0 0 1 0 1 0 0 0 0 0 
+1 0 0 0 0 0 0 1 0 0 0 
+0 0 0 0 0 0 0 0 0 1 0 
+0 1 0 0 0 0 0 0 0 0 0 
+0 0 0 1 0 0 0 1 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 1 0 0 0 0 0 0 
+0 0 0 0 0 0 1 0 0 0 0 
+0 0 0 0 0 0 0 1 0 0 0 
+--------------------------------
+0.Quit
+1.Input Graph using Adjacency List
+2.Input Graph using Adjacency Matrix
+3.Transform List to Matrix
+4.Transform Matrix to List
+5.DFS List With Recursion
+6.DFS Matrix With Recursion
+7.DFS List Without Recursion
+8.DFS Matrix Without Recursion
+9.BFS List
+10.BFS Matrix
+--------------------------------
+Input an Integer to Choose:
+0 : 4 1 
+1 : 2 
+2 : 5 3 
+3 : 7 0 
+4 : 9 
+5 : 1 
+6 : 7 3 
+7 : 11 
+8 : 11 4 
+9 : 6 
+10 : 7 
+11 : 10 
+--------------------------------
+0.Quit
+1.Input Graph using Adjacency List
+2.Input Graph using Adjacency Matrix
+3.Transform List to Matrix
+4.Transform Matrix to List
+5.DFS List With Recursion
+6.DFS Matrix With Recursion
+7.DFS List Without Recursion
+8.DFS Matrix Without Recursion
+9.BFS List
+10.BFS Matrix
+--------------------------------
+Input an Integer to Choose:
+DFSWithRecursion
+Sequence:
+0 4 9 6 7 11 10 3 1 2 5 8 
+Node  ID
+  0 : 1
+  1 : 9
+  2 : 10
+  3 : 8
+  4 : 2
+  5 : 11
+  6 : 4
+  7 : 5
+  8 : 12
+  9 : 3
+  10 : 7
+  11 : 6
+
+--------------------------------
+0.Quit
+1.Input Graph using Adjacency List
+2.Input Graph using Adjacency Matrix
+3.Transform List to Matrix
+4.Transform Matrix to List
+5.DFS List With Recursion
+6.DFS Matrix With Recursion
+7.DFS List Without Recursion
+8.DFS Matrix Without Recursion
+9.BFS List
+10.BFS Matrix
+--------------------------------
+Input an Integer to Choose:
+DFSWithRecursion
+Sequence:
+0 1 2 3 7 11 10 5 4 9 6 8 
+Node  ID
+  0 : 1
+  1 : 2
+  2 : 3
+  3 : 4
+  4 : 9
+  5 : 8
+  6 : 11
+  7 : 5
+  8 : 12
+  9 : 10
+  10 : 7
+  11 : 6
+
+--------------------------------
+0.Quit
+1.Input Graph using Adjacency List
+2.Input Graph using Adjacency Matrix
+3.Transform List to Matrix
+4.Transform Matrix to List
+5.DFS List With Recursion
+6.DFS Matrix With Recursion
+7.DFS List Without Recursion
+8.DFS Matrix Without Recursion
+9.BFS List
+10.BFS Matrix
+--------------------------------
+Input an Integer to Choose:
+DFSWithoutRecursion
+Sequence:
+0 1 2 3 7 11 10 5 4 9 6 8 
+Node  ID
+  0 : 1
+  1 : 2
+  2 : 3
+  3 : 4
+  4 : 9
+  5 : 8
+  6 : 11
+  7 : 5
+  8 : 12
+  9 : 10
+  10 : 7
+  11 : 6
+
+--------------------------------
+0.Quit
+1.Input Graph using Adjacency List
+2.Input Graph using Adjacency Matrix
+3.Transform List to Matrix
+4.Transform Matrix to List
+5.DFS List With Recursion
+6.DFS Matrix With Recursion
+7.DFS List Without Recursion
+8.DFS Matrix Without Recursion
+9.BFS List
+10.BFS Matrix
+--------------------------------
+Input an Integer to Choose:
+DFSWithoutRecursion
+Sequence:
+0 4 9 6 7 11 10 3 1 2 5 8 
+Node  ID
+  0 : 1
+  1 : 9
+  2 : 10
+  3 : 8
+  4 : 2
+  5 : 11
+  6 : 4
+  7 : 5
+  8 : 12
+  9 : 3
+  10 : 7
+  11 : 6
+
+--------------------------------
+0.Quit
+1.Input Graph using Adjacency List
+2.Input Graph using Adjacency Matrix
+3.Transform List to Matrix
+4.Transform Matrix to List
+5.DFS List With Recursion
+6.DFS Matrix With Recursion
+7.DFS List Without Recursion
+8.DFS Matrix Without Recursion
+9.BFS List
+10.BFS Matrix
+--------------------------------
+Input an Integer to Choose:
+BFSWithoutRecursion
+Sequence:
+0 4 1 9 2 6 5 3 7 11 10 8 
+Node  ID
+  0 : 1
+  1 : 3
+  2 : 5
+  3 : 8
+  4 : 2
+  5 : 7
+  6 : 6
+  7 : 9
+  8 : 12
+  9 : 4
+  10 : 11
+  11 : 10
+
+--------------------------------
+0.Quit
+1.Input Graph using Adjacency List
+2.Input Graph using Adjacency Matrix
+3.Transform List to Matrix
+4.Transform Matrix to List
+5.DFS List With Recursion
+6.DFS Matrix With Recursion
+7.DFS List Without Recursion
+8.DFS Matrix Without Recursion
+9.BFS List
+10.BFS Matrix
+--------------------------------
+Input an Integer to Choose:
+BFSWithoutRecursion
+Sequence:
+0 1 4 2 9 3 5 6 7 11 10 8 
+Node  ID
+  0 : 1
+  1 : 2
+  2 : 4
+  3 : 6
+  4 : 3
+  5 : 7
+  6 : 8
+  7 : 9
+  8 : 12
+  9 : 5
+  10 : 11
+  11 : 10
+
+--------------------------------
+0.Quit
+1.Input Graph using Adjacency List
+2.Input Graph using Adjacency Matrix
+3.Transform List to Matrix
+4.Transform Matrix to List
+5.DFS List With Recursion
+6.DFS Matrix With Recursion
+7.DFS List Without Recursion
+8.DFS Matrix Without Recursion
+9.BFS List
+10.BFS Matrix
+--------------------------------
+Input an Integer to Choose:
