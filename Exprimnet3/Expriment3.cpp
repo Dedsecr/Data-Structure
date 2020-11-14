@@ -21,6 +21,7 @@ struct Result_AllSource
 };
 struct Graph
 {
+    int Matrix[MAXN][MAXN];
     int Next[MAXM], To[MAXM], V[MAXM], Head[MAXN];
     int Tot;
     Graph()
@@ -30,6 +31,7 @@ struct Graph
         memset(To, 0, sizeof(To));
         memset(V, 0, sizeof(V));
         memset(Head, 0, sizeof(Head));
+        memset(Matrix, -1, sizeof(Matrix));
     }
     void Add(int x,int y,int v)
     {
@@ -37,6 +39,7 @@ struct Graph
         Head[x] = Tot;
         To[Tot] = y;
         V[Tot] = v;
+        Matrix[x][y] = v;
     }
 };
 struct Node
@@ -160,4 +163,13 @@ Result_AllSource Floyd()
             for (int j = 0; j < MAXN; ++j)
                 Res.Dis[i][j] = min(Res.Dis[i][j], Res.Dis[i][k] + Res.Dis[k][j]);
     return Res;
+}
+void FingPath(int x)
+{
+    
+}
+void SingleTargetShortestPath(int Target)
+{
+    Result_AllSource Res = Floyd();
+    
 }
