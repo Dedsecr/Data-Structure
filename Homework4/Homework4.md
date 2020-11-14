@@ -145,6 +145,8 @@ private:
 
 **Homework4_In.txt**
 
+<img src="https://gitee.com/Dedsecr/pic/raw/master/pic/DataStructure-Homwork4.png" alt="DataStructure-Homwork4" style="zoom:50%;" />
+
 ```CPP
 1                输入图到邻接表中
 12 17			 12个点17个边的图
