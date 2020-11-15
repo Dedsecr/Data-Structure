@@ -14,10 +14,30 @@ const int MAXM = MAXN * MAXN << 1;
 struct Result_SingleSource
 {
     int S, Dis[MAXN];
+    Result_SingleSource()
+    {
+        for (int i = 0; i < MAXN; ++i)
+            Dis[i] = 1e9;
+    }
 };
 struct Result_AllSource
 {
     int Dis[MAXN][MAXN];
+    Result_AllSource()
+    {
+        for (int i = 0; i < MAXN; ++i)
+            for (int j = 0; j < MAXN; ++j)
+                Dis[i][j] = 1e9;
+    }
+};
+struct Result_Path
+{
+    string Path[MAXN];
+    Result_Path()
+    {
+        for (int i = 0; i < MAXN; ++i)
+            Path[i] = "";
+    }
 };
 struct Graph
 {
@@ -123,6 +143,15 @@ public:
 Priority_Queue Q;
 Graph G;
 bool Vis[MAXN];
+int Stack[MAXN], StackP;
+Result_SingleSource AllSource2SingleSource(Result_AllSource AS,int S)
+{
+    Result_SingleSource Res;
+    Res.S = S;
+    for (int i = 0; i < MAXN; ++i)
+        Res.Dis[i] = AS.Dis[S][i];
+    return Res;
+}
 Result_SingleSource Dijkstra(int S)
 {
     memset(Vis, 0, sizeof(Vis));
@@ -130,7 +159,6 @@ Result_SingleSource Dijkstra(int S)
     while(!Q.empty())
         Q.pop();
     Res.S = S;
-    memset(Res.Dis, 123, sizeof(Res.Dis));
     Q.push(Node(S, 0));
     Vis[S] = 1;
     Res.Dis[S] = 0;
@@ -152,7 +180,6 @@ Result_SingleSource Dijkstra(int S)
 Result_AllSource Floyd()
 {
     Result_AllSource Res;
-    memset(Res.Dis, 123, sizeof(Res.Dis));
     for (int i = 0; i < MAXN; ++i)
         Res.Dis[i][i] = 0;
     for (int x = 0; x < MAXN; ++x)
@@ -164,9 +191,40 @@ Result_AllSource Floyd()
                 Res.Dis[i][j] = min(Res.Dis[i][j], Res.Dis[i][k] + Res.Dis[k][j]);
     return Res;
 }
-void FingPath(int x)
+void FindPathDFS(int x, Result_Path &Res, Result_SingleSource &SS,int Sum)
 {
+    Vis[x] = 1;
+    Stack[++StackP] = x;
+
+    for (int i = 1; i <= StackP; ++i)
+    {
+        Res.Path[x] += to_string(Stack[i]);
+        Res.Path[x] += ' ';
+    }
+
+    for (int i = G.Head[x]; i; i = G.Next[i])
+        if(Sum + G.V[i] == SS.Dis[G.To[i]] && !Vis[G.To[i]])
+        {
+            FindPathDFS(G.To[i], Res, SS, Sum + G.V[i]);
+        }
+}
+Result_Path FindPath(int x,Result_SingleSource SS)
+{
+    StackP = 0;
+    memset(Vis, 0, sizeof(Vis));
+    Result_Path Res;
+    FindPathDFS(x, Res, SS, 0);
+    return Res;
+}
+void PrintEveryShortestLengthAndPath()
+{
+    Result_AllSource Res = Floyd();
+    for (int i = 0; i < MAXN; ++i, cout << '\n')
+        for (int j = 0; j < MAXN; ++j)
+            cout << Res.Dis[i][j] << " ";
     
+    for (int x = 0)
+    Result_Path = FindPath()
 }
 void SingleTargetShortestPath(int Target)
 {
