@@ -220,7 +220,7 @@ void FindPathDFS(int x, Result_Path &Res, Result_SingleSource &SS, int Sum)
         {
             FindPathDFS(G.To[i], Res, SS, Sum + G.V[i]);
         }
-    
+
     StackP--;
 }
 Result_Path FindPath(int x, Result_SingleSource SS)
@@ -239,7 +239,7 @@ void Print_Every_Result_Path(int S, Result_Path &Res)
             continue;
         if (Res.Path[i].length() == 0)
             continue;
-        cout << S << " TO " << i << " : "  << Res.Path[i] << "\n";
+        cout << S << " TO " << i << " : " << Res.Path[i] << "\n";
     }
 }
 void Print_Single_Result_Path(int S, int Target, Result_Path &Res)
@@ -253,9 +253,9 @@ void GetEveryShortestLengthAndPath()
     Result_AllSource Res = Floyd();
     for (int i = 1; i <= G.n; ++i, cout << '\n')
         for (int j = 1; j <= G.n; ++j)
-            if(Res.Dis[i][j] >= 1e9)
+            if (Res.Dis[i][j] >= 1e9)
                 cout << "-1 ";
-            else 
+            else
                 cout << Res.Dis[i][j] << " ";
 
     for (int x = 1; x <= G.n; ++x)
@@ -278,6 +278,10 @@ void GetSingleShortestPath(int S, int T)
     Result_SingleSource Res = Dijkstra(S);
     Result_Path RP = FindPath(S, Res);
     Print_Single_Result_Path(S, T, RP);
+
+    Res = Dijkstra(T);
+    RP = FindPath(T, Res);
+    Print_Single_Result_Path(T, S, RP);
 }
 void GetReachableMatrix()
 {
