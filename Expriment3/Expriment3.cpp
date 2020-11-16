@@ -180,10 +180,10 @@ Result_SingleSource Dijkstra(int S)
         Node Now = Q.top();
         Q.pop();
         int x = Now.x;
-        for (int i = G.Head[x]; i; i = G.Next[x])
-            if (Res.Dis[G.To[i]] > Res.Dis[G.To[i]] + G.V[i])
+        for (int i = G.Head[x]; i; i = G.Next[i])
+            if (Res.Dis[G.To[i]] > Res.Dis[x] + G.V[i])
             {
-                Res.Dis[G.To[i]] = Res.Dis[G.To[i]] + G.V[i];
+                Res.Dis[G.To[i]] = Res.Dis[x] + G.V[i];
                 if (!Vis[G.To[i]])
                     Q.push(Node(G.To[i], Res.Dis[G.To[i]]));
             }
@@ -197,7 +197,7 @@ Result_AllSource Floyd()
         Res.Dis[i][i] = 0;
     for (int x = 0; x < MAXN; ++x)
         for (int i = G.Head[x]; i; i = G.Next[i])
-            Res.Dis[x][G.To[i]] = G.V[i],cout<<x<<" "<<G.To[i]<<"***\n";
+            Res.Dis[x][G.To[i]] = G.V[i];
     for (int k = 0; k < MAXN; ++k)
         for (int i = 0; i < MAXN; ++i)
             for (int j = 0; j < MAXN; ++j)
@@ -220,6 +220,8 @@ void FindPathDFS(int x, Result_Path &Res, Result_SingleSource &SS, int Sum)
         {
             FindPathDFS(G.To[i], Res, SS, Sum + G.V[i]);
         }
+    
+    StackP--;
 }
 Result_Path FindPath(int x, Result_SingleSource SS)
 {
@@ -246,7 +248,7 @@ void Print_Single_Result_Path(int S, int Target, Result_Path &Res)
         return;
     cout << S << " TO " << Target << " : " << Res.Path[Target] << "\n";
 }
-void PrintEveryShortestLengthAndPath()
+void GetEveryShortestLengthAndPath()
 {
     Result_AllSource Res = Floyd();
     for (int i = 1; i <= G.n; ++i, cout << '\n')
@@ -262,7 +264,7 @@ void PrintEveryShortestLengthAndPath()
         Print_Every_Result_Path(x, RP);
     }
 }
-void PrintSingleTargetShortestPath(int Target)
+void GetSingleTargetShortestPath(int Target)
 {
     Result_AllSource Res = Floyd();
     for (int x = 1; x <= G.n; ++x)
@@ -271,13 +273,13 @@ void PrintSingleTargetShortestPath(int Target)
         Print_Single_Result_Path(x, Target, RP);
     }
 }
-void PirntSingleShortestPath(int S, int T)
+void GetSingleShortestPath(int S, int T)
 {
     Result_SingleSource Res = Dijkstra(S);
     Result_Path RP = FindPath(S, Res);
     Print_Single_Result_Path(S, T, RP);
 }
-void PrintReachableMatrix()
+void GetReachableMatrix()
 {
     Result_AllSource Res = Floyd();
     for (int i = 1; i <= G.n; ++i, cout << '\n')
@@ -289,8 +291,11 @@ void PrintReachableMatrix()
 }
 int main()
 {
-    freopen("Expriment3_In.txt", "r", stdin);
+    freopen("Expriment3_In2.txt", "r", stdin);
     InputAndBuild();
-    PrintEveryShortestLengthAndPath();
+    GetEveryShortestLengthAndPath();
+    GetSingleTargetShortestPath(4);
+    GetSingleShortestPath(1, 4);
+    GetReachableMatrix();
     return 0;
 }
