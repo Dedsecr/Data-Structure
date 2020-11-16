@@ -41,6 +41,7 @@ struct Result_Path
 };
 struct Graph
 {
+    int n, m;
     int Matrix[MAXN][MAXN];
     int Next[MAXM], To[MAXM], V[MAXM], Head[MAXN];
     int Tot;
@@ -216,6 +217,15 @@ Result_Path FindPath(int x,Result_SingleSource SS)
     FindPathDFS(x, Res, SS, 0);
     return Res;
 }
+void Print_Result_Path(int S, Result_Path &Res)
+{
+    for (int i = 1; i <= G.n; ++i)
+    {
+        if(S == i)continue;
+        if(Res.Path[i].length() == 0)continue;
+        cout << S << " TO " << i << Res.Path[i] << "\n";
+    }
+}
 void PrintEveryShortestLengthAndPath()
 {
     Result_AllSource Res = Floyd();
@@ -223,8 +233,11 @@ void PrintEveryShortestLengthAndPath()
         for (int j = 0; j < MAXN; ++j)
             cout << Res.Dis[i][j] << " ";
     
-    for (int x = 0)
-    Result_Path = FindPath()
+    for (int x = 1; x <= G.n; ++x)
+    {
+        Result_Path RP = FindPath(x, AllSource2SingleSource(Res, x));
+        Print_Result_Path(x, RP);
+    }
 }
 void SingleTargetShortestPath(int Target)
 {
