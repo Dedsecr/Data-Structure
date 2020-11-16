@@ -284,3 +284,10 @@ void PrintReachableMatrix()
             else
                 cout << "1 ";
 }
+int main()
+{
+    freopen("Expriment3_In.txt", "r", stdin);
+    InputAndBuild();
+    PrintEveryShortestLengthAndPath();
+    return 0;
+}
