@@ -196,8 +196,8 @@ Result_AllSource Floyd()
     for (int i = 0; i < MAXN; ++i)
         Res.Dis[i][i] = 0;
     for (int x = 0; x < MAXN; ++x)
-        for (int i = G.Head[x]; i; i = G.Next[x])
-            Res.Dis[x][G.To[i]] = G.V[i];
+        for (int i = G.Head[x]; i; i = G.Next[i])
+            Res.Dis[x][G.To[i]] = G.V[i],cout<<x<<" "<<G.To[i]<<"***\n";
     for (int k = 0; k < MAXN; ++k)
         for (int i = 0; i < MAXN; ++i)
             for (int j = 0; j < MAXN; ++j)
@@ -237,21 +237,24 @@ void Print_Every_Result_Path(int S, Result_Path &Res)
             continue;
         if (Res.Path[i].length() == 0)
             continue;
-        cout << S << " TO " << i << Res.Path[i] << "\n";
+        cout << S << " TO " << i << " : "  << Res.Path[i] << "\n";
     }
 }
 void Print_Single_Result_Path(int S, int Target, Result_Path &Res)
 {
     if (Res.Path[Target].length() == 0)
         return;
-    cout << S << " TO " << Target << Res.Path[Target] << "\n";
+    cout << S << " TO " << Target << " : " << Res.Path[Target] << "\n";
 }
 void PrintEveryShortestLengthAndPath()
 {
     Result_AllSource Res = Floyd();
-    for (int i = 0; i < MAXN; ++i, cout << '\n')
-        for (int j = 0; j < MAXN; ++j)
-            cout << Res.Dis[i][j] << " ";
+    for (int i = 1; i <= G.n; ++i, cout << '\n')
+        for (int j = 1; j <= G.n; ++j)
+            if(Res.Dis[i][j] >= 1e9)
+                cout << "-1 ";
+            else 
+                cout << Res.Dis[i][j] << " ";
 
     for (int x = 1; x <= G.n; ++x)
     {
