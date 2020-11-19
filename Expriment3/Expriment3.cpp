@@ -11,6 +11,7 @@
 using namespace std;
 const int MAXN = 50;
 const int MAXM = MAXN * MAXN << 1;
+//单源最短路搜索的结果
 struct Result_SingleSource
 {
     int S, Dis[MAXN];
@@ -20,6 +21,7 @@ struct Result_SingleSource
             Dis[i] = 1e9;
     }
 };
+//多源最短路搜索的结果
 struct Result_AllSource
 {
     int Dis[MAXN][MAXN];
@@ -30,6 +32,7 @@ struct Result_AllSource
                 Dis[i][j] = 1e9;
     }
 };
+//多源最短路搜索的路径结果
 struct Result_Path
 {
     string Path[MAXN];
@@ -39,10 +42,10 @@ struct Result_Path
             Path[i] = "";
     }
 };
+//图的存储结构
 struct Graph
 {
     int n, m;
-    //int Matrix[MAXN][MAXN];
     int Next[MAXM], To[MAXM], V[MAXM], Head[MAXN];
     int Tot;
     Graph()
@@ -52,7 +55,6 @@ struct Graph
         memset(To, 0, sizeof(To));
         memset(V, 0, sizeof(V));
         memset(Head, 0, sizeof(Head));
-        //memset(Matrix, -1, sizeof(Matrix));
     }
     void Add(int x, int y, int v)
     {
@@ -60,9 +62,9 @@ struct Graph
         Head[x] = Tot;
         To[Tot] = y;
         V[Tot] = v;
-        //Matrix[x][y] = v;
     }
 };
+//点
 struct Node
 {
     int x, Dis;
@@ -147,6 +149,7 @@ Priority_Queue Q;
 Graph G;
 bool Vis[MAXN];
 int Stack[MAXN], StackP;
+//输入图
 void InputAndBuild()
 {
     cin >> G.n >> G.m;
@@ -157,6 +160,7 @@ void InputAndBuild()
         G.Add(x, y, v);
     }
 }
+//把AllSource转换成SingleSource
 Result_SingleSource AllSource2SingleSource(Result_AllSource AS, int S)
 {
     Result_SingleSource Res;
@@ -165,6 +169,7 @@ Result_SingleSource AllSource2SingleSource(Result_AllSource AS, int S)
         Res.Dis[i] = AS.Dis[S][i];
     return Res;
 }
+//Dijkstra算法实现
 Result_SingleSource Dijkstra(int S)
 {
     memset(Vis, 0, sizeof(Vis));
@@ -173,13 +178,15 @@ Result_SingleSource Dijkstra(int S)
         Q.pop();
     Res.S = S;
     Q.push(Node(S, 0));
-    Vis[S] = 1;
     Res.Dis[S] = 0;
     while (!Q.empty())
     {
         Node Now = Q.top();
         Q.pop();
         int x = Now.x;
+        if(Vis[x])
+            continue;
+        Vis[x] = 1;
         for (int i = G.Head[x]; i; i = G.Next[i])
             if (Res.Dis[G.To[i]] > Res.Dis[x] + G.V[i])
             {
@@ -190,6 +197,7 @@ Result_SingleSource Dijkstra(int S)
     }
     return Res;
 }
+//Floyd算法实现
 Result_AllSource Floyd()
 {
     Result_AllSource Res;
@@ -204,6 +212,7 @@ Result_AllSource Floyd()
                 Res.Dis[i][j] = min(Res.Dis[i][j], Res.Dis[i][k] + Res.Dis[k][j]);
     return Res;
 }
+//找路径的DFS
 void FindPathDFS(int x, Result_Path &Res, Result_SingleSource &SS, int Sum)
 {
     Vis[x] = 1;
@@ -220,9 +229,10 @@ void FindPathDFS(int x, Result_Path &Res, Result_SingleSource &SS, int Sum)
         {
             FindPathDFS(G.To[i], Res, SS, Sum + G.V[i]);
         }
-
+    
     StackP--;
 }
+//找从x开始的所有最短路径
 Result_Path FindPath(int x, Result_SingleSource SS)
 {
     StackP = 0;
@@ -231,6 +241,7 @@ Result_Path FindPath(int x, Result_SingleSource SS)
     FindPathDFS(x, Res, SS, 0);
     return Res;
 }
+//输出S到每个顶点的路径
 void Print_Every_Result_Path(int S, Result_Path &Res)
 {
     for (int i = 1; i <= G.n; ++i)
@@ -239,23 +250,25 @@ void Print_Every_Result_Path(int S, Result_Path &Res)
             continue;
         if (Res.Path[i].length() == 0)
             continue;
-        cout << S << " TO " << i << " : " << Res.Path[i] << "\n";
+        cout << S << " TO " << i << " : "  << Res.Path[i] << "\n";
     }
 }
+//输出S到Target的路径
 void Print_Single_Result_Path(int S, int Target, Result_Path &Res)
 {
     if (Res.Path[Target].length() == 0)
         return;
     cout << S << " TO " << Target << " : " << Res.Path[Target] << "\n";
 }
+//输出任意两个顶点间的最短路径长度和最短路径
 void GetEveryShortestLengthAndPath()
 {
     Result_AllSource Res = Floyd();
     for (int i = 1; i <= G.n; ++i, cout << '\n')
         for (int j = 1; j <= G.n; ++j)
-            if (Res.Dis[i][j] >= 1e9)
+            if(Res.Dis[i][j] >= 1e9)
                 cout << "-1 ";
-            else
+            else 
                 cout << Res.Dis[i][j] << " ";
 
     for (int x = 1; x <= G.n; ++x)
@@ -264,6 +277,7 @@ void GetEveryShortestLengthAndPath()
         Print_Every_Result_Path(x, RP);
     }
 }
+//找出图中每个顶点到某个指定顶点Target的最短路径
 void GetSingleTargetShortestPath(int Target)
 {
     Result_AllSource Res = Floyd();
@@ -273,6 +287,7 @@ void GetSingleTargetShortestPath(int Target)
         Print_Single_Result_Path(x, Target, RP);
     }
 }
+//对于某对顶点S和T，找出S到T和T到S的一条最短路径 
 void GetSingleShortestPath(int S, int T)
 {
     Result_SingleSource Res = Dijkstra(S);
@@ -283,6 +298,7 @@ void GetSingleShortestPath(int S, int T)
     RP = FindPath(T, Res);
     Print_Single_Result_Path(T, S, RP);
 }
+//计算有向图的可达矩阵
 void GetReachableMatrix()
 {
     Result_AllSource Res = Floyd();
@@ -295,11 +311,51 @@ void GetReachableMatrix()
 }
 int main()
 {
-    freopen("Expriment3_In2.txt", "r", stdin);
-    InputAndBuild();
-    GetEveryShortestLengthAndPath();
-    GetSingleTargetShortestPath(4);
-    GetSingleShortestPath(1, 4);
-    GetReachableMatrix();
+    //freopen("Expriment3_In.txt", "r", stdin);
+    //freopen("Expriment3_Out.txt", "w", stdout);
+    while(1)
+    {
+        int OP;
+        printf(
+            "*******************************************\n"
+            "*                                         *\n"
+            "*    0.Exit                               *\n"
+            "*    1.Input And Build                    *\n"
+            "*    2.Get Every Shortest Length And Path *\n"
+            "*    3.Get Single Target Shortest Path    *\n"
+            "*    4.Get Single Shortest Path           *\n"
+            "*    5.Get Reachable Matrix               *\n"
+            "*                                         *\n"
+            "*******************************************\n");
+        cin >> OP;
+        if(OP == 0)
+            break;
+        else if(OP == 1)
+        {
+            InputAndBuild();
+        }
+        else if(OP == 2)
+        {
+            GetEveryShortestLengthAndPath();
+        }
+        else if(OP == 3)
+        {
+            puts("Please input your target:");
+            int Target;
+            cin >> Target;
+            GetSingleTargetShortestPath(Target);
+        }
+        else if(OP == 4)
+        {
+            puts("Please input your starting point and target:");
+            int S, T;
+            cin >> S >> T;
+            GetSingleShortestPath(S, T);
+        }
+        else if(OP == 5)
+        {
+            GetReachableMatrix();
+        }
+    }
     return 0;
 }
