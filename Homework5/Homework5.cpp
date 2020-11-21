@@ -14,6 +14,7 @@ class AVL
         Node()
         {
             LCh = RCh = NULL;
+            Size = Height = 0;
         }
     };
 public:
@@ -35,6 +36,8 @@ public:
     }
     void UpdateHS(NodeP x)
     {
+        if(x == NULL)
+            return;
         x->Height = max(GetHeight(x->LCh), GetHeight(x->RCh)) + 1;
         x->Size = GetSize(x->LCh) + GetSize(x->RCh) + 1;
     }
@@ -90,7 +93,6 @@ public:
     }
     void Insert(NodeP &x, int Data)
     {
-        //cout << 1 << "&*";
         if(x == NULL)
         {
             x = new Node;
