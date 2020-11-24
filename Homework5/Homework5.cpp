@@ -4,9 +4,10 @@
 #include <string>
 #include <cstring>
 using namespace std;
-const int MAXN = 50;
 class AVL
 {
+private:
+    //树节点的存储结构
     struct Node
     {
         int Data, Size, Height;
@@ -17,9 +18,7 @@ class AVL
             Size = Height = 0;
         }
     };
-public:
     typedef Node * NodeP;
-    NodeP Root;
     int GetHeight(NodeP x)
     {
         if(x == NULL)
@@ -91,6 +90,9 @@ public:
         }
         UpdateHS(x);
     }
+public:
+    
+    NodeP Root;
     void Insert(NodeP &x, int Data)
     {
         if(x == NULL)
@@ -98,6 +100,7 @@ public:
             x = new Node;
             x->Data = Data;
             x->Size = 1;
+            x->Height = 1;
             return;
         }
         x->Size++;
@@ -108,13 +111,14 @@ public:
     }
     int Delete(NodeP &x, int Data)
     {
-        x->Data--;
+        x->Size--;
         if(x->Data == Data || (Data < x->Data && x->LCh == NULL) || (Data > x->Data && x->RCh == NULL))
         {
             int Res = x->Data;
             if(x->LCh == NULL) x = x->RCh;
             else if(x->RCh == NULL) x = x->LCh;
             else x->Data = Delete(x->LCh, Data + 1);
+            UpdateHS(x);
             return Res;
         }
         if(x->Data > Data) return Delete(x->LCh, Data);
@@ -151,15 +155,51 @@ public:
 AVL Tree;
 int main()
 {
-    //freopen("Homework5_In.txt", "r", stdin);
-    int n;
+    freopen("Homework5_In.txt", "r", stdin);
+    freopen("Homework5_Out.txt", "w", stdout);
+    while(1)
+    {
+        int OP;
+        printf("************************\n"
+               " 0. Quit                \n"
+               " 1. Insert              \n"
+               " 2. Delete              \n"
+               " 3. Get Rank            \n"
+               " 4. Get Sorted Sequence \n"
+               "************************\n");
+        cin >> OP;
+        if(OP == 0)
+            break;
+        else if(OP == 1)
+        {
+            int x;
+            cin >> x;
+            Tree.Insert(Tree.Root, x);
+        }
+        else if(OP == 2)
+        {
+            int x;
+            cin >> x;
+            Tree.Delete(Tree.Root, x);
+        }
+        else if(OP == 3)
+        {
+            int x;
+            cin >> x;
+            Tree.Rank(Tree.Root, x);
+        }
+        else
+        {
+            cout << Tree.GetSorted();
+        }
+    }
+    /*int n;
     cin >> n;
     for (int i = 1; i <= n; ++i)
     {
         int x;
         cin >> x;
         Tree.Insert(Tree.Root, x);
-    }
-    cout << Tree.GetSorted();
+    }*/
     return 0;
 }
