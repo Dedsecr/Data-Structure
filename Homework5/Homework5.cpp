@@ -121,9 +121,11 @@ public:
             UpdateHS(x);
             return Res;
         }
-        if(x->Data > Data) return Delete(x->LCh, Data);
-        else return Delete(x->RCh, Data);
+        int Res;
+        if(x->Data > Data) Res = Delete(x->LCh, Data);
+        else Res = Delete(x->RCh, Data);
         Maintain(x);
+        return Res;
     }
     int Rank(NodeP x, int Data)
     {
@@ -150,6 +152,15 @@ public:
         string Res;
         GetSortedDFS(Root, Res);
         return Res;
+    }
+    void DFS(NodeP x)
+    {
+        int l = -1, r = -1;
+        if(x->LCh != NULL)
+            l = x->LCh->Data, DFS(x->LCh);
+        if(x->RCh != NULL)
+            r = x->RCh->Data,DFS(x->RCh);
+        cout << x->Data << " " << l << " " << r << endl;
     }
 };
 AVL Tree;
