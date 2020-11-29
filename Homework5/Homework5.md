@@ -74,236 +74,125 @@ struct Node
 
 **本程序采用文件输入输出。**
 
-为方便测试，源程序 `Homework5.cpp` 中**将测试内容写入主函数** 。
-
 另提供样例测试数据输入 `Homework5_In.txt` ，和期望输出 `Homework5_Out.txt` 。
 
 
 
 #### 操作说明
 
-> 0.Quit
-> 1.Input Graph using Adjacency List
-> 2.Input Graph using Adjacency Matrix
-> 3.Transform List to Matrix
-> 4.Transform Matrix to List
-> 5.DFS List With Recursion
-> 6.DFS Matrix With Recursion
-> 7.DFS List Without Recursion
-> 8.DFS Matrix Without Recursion
-> 9.BFS List
-> 10.BFS Matrix
+> 0. Quit 											退出
+> 1. Insert                                          插入节点
+> 2. Delete                                         删除节点
+> 3. Get Rank                                    查找在树中的次序
+> 4. Get Sorted Sequence               输出排好序的序列
 
 
 
 #### 数据说明
 
-**Homework4_In.txt**
-
-<img src="https://gitee.com/Dedsecr/pic/raw/master/pic/DataStructure-Homwork4.png" alt="DataStructure-Homwork4" style="zoom:50%;" />
+**Homework5_In.txt**
 
 ```CPP
-1                输入图到邻接表中
-12 17			 12个点17个边的图
-0 4				 图的边的描述
-4 9
-9 6
-6 3
-3 0
-2 5
-5 1
-1 2
-10 7
-7 11
-11 10
-2 3
-8 4
-8 11
-6 7
-3 7
-0 1
-3				邻接表转邻接矩阵
-4				邻接矩阵转邻接表
-5				在邻接表上递归地DFS
-6				在邻接矩阵上递归地DFS
-7				在邻接表上非递归地DFS
-8				在邻接矩阵上非递归地DFS
-9				在邻接矩阵上BFS
-10				在邻接表上BFS
-0				退出
+1		输入1
+1
+1		输入2
+2
+1		输入3
+3
+1		输入4
+4
+1		输入5
+5
+1		输入6
+6
+1		输入7
+7		
+1		输入8
+8
+1		输入9
+9
+4		输出排好序的序列
+2		删除1
+1
+2		删除3
+3
+3		查找6在树中的次序
+6
+3		查找8在树中的次序
+8
+4		输出排好序的序列
+0		结束
 ```
 
-**Homework4_Out.txt**
+**Homework5_Out.txt**
 
 ```CPP
---------------------------------
-0.Quit
-1.Input Graph using Adjacency List
-2.Input Graph using Adjacency Matrix
-3.Transform List to Matrix
-4.Transform Matrix to List
-5.DFS List With Recursion
-6.DFS Matrix With Recursion
-7.DFS List Without Recursion
-8.DFS Matrix Without Recursion
-9.BFS List
-10.BFS Matrix
---------------------------------
-Input an Integer to Choose:				输入图到邻接表中，邻接表的描述
-0 : 1 4 
-1 : 2 
-2 : 3 5 
-3 : 7 0 
-4 : 9 
-5 : 1 
-6 : 7 3 
-7 : 11 
-8 : 11 4 
-9 : 6 
-10 : 7 
-11 : 10 
-**提示（略去）**
-Input an Integer to Choose:				邻接表转邻接矩阵，邻接矩阵的描述
-0 1 0 0 1 0 0 0 0 0 0 
-0 0 1 0 0 0 0 0 0 0 0 
-0 0 0 1 0 1 0 0 0 0 0 
-1 0 0 0 0 0 0 1 0 0 0 
-0 0 0 0 0 0 0 0 0 1 0 
-0 1 0 0 0 0 0 0 0 0 0 
-0 0 0 1 0 0 0 1 0 0 0 
-0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 1 0 0 0 0 0 0 
-0 0 0 0 0 0 1 0 0 0 0 
-0 0 0 0 0 0 0 1 0 0 0 
-**提示（略去）**
-Input an Integer to Choose:				邻接矩阵转回邻接表，邻接表的描述
-0 : 4 1 
-1 : 2 
-2 : 5 3 
-3 : 7 0 
-4 : 9 
-5 : 1 
-6 : 7 3 
-7 : 11 
-8 : 11 4 
-9 : 6 
-10 : 7 
-11 : 10 
-**提示（略去）**
-Input an Integer to Choose:				在邻接表上递归地DFS
-DFSWithRecursion
-Sequence:
-0 4 9 6 7 11 10 3 1 2 5 8 				DFS序
-Node  ID								编号
-  0 : 1
-  1 : 9
-  2 : 10
-  3 : 8
-  4 : 2
-  5 : 11
-  6 : 4
-  7 : 5
-  8 : 12
-  9 : 3
-  10 : 7
-  11 : 6
+************************
+ 0. Quit                
+ 1. Insert              
+ 2. Delete              
+ 3. Get Rank            
+ 4. Get Sorted Sequence 
+************************
+RR				输入3后RR旋转（可通过下面的不使用文件输入输出查看旋转是在什么时候进行的）
+RR				输入5后RR旋转
+RR				输入6后RR旋转
+RR				输入7后RR旋转
+RR				输入9后RR旋转
+1 2 3 4 5 6 7 8 9 	输出排好序的序列
+RR				删除1和3后RR旋转
+4				6在树中第4小
+6				8在树中第6小
+2 4 5 6 7 8 9 		输出排好序的序列
+```
 
-**提示（略去）**
-Input an Integer to Choose:				在邻接矩阵上递归地DFS
-DFSWithRecursion
-Sequence:
-0 1 2 3 7 11 10 5 4 9 6 8 				DFS序
-Node  ID								编号
-  0 : 1
-  1 : 2
-  2 : 3
-  3 : 4
-  4 : 9
-  5 : 8
-  6 : 11
-  7 : 5
-  8 : 12
-  9 : 10
-  10 : 7
-  11 : 6
+**不使用文件输入输出**
 
-**提示（略去）**
-Input an Integer to Choose:				在邻接表上非递归地DFS
-DFSWithoutRecursion
-Sequence:
-0 1 2 3 7 11 10 5 4 9 6 8 				DFS序
-Node  ID								编号
-  0 : 1
-  1 : 2
-  2 : 3
-  3 : 4
-  4 : 9
-  5 : 8
-  6 : 11
-  7 : 5
-  8 : 12
-  9 : 10
-  10 : 7
-  11 : 6
-
-**提示（略去）**
-Input an Integer to Choose:				在邻接矩阵上非递归地DFS
-DFSWithoutRecursion
-Sequence:
-0 4 9 6 7 11 10 3 1 2 5 8 				DFS序
-Node  ID								编号
-  0 : 1
-  1 : 9
-  2 : 10
-  3 : 8
-  4 : 2
-  5 : 11
-  6 : 4
-  7 : 5
-  8 : 12
-  9 : 3
-  10 : 7
-  11 : 6
-
-**提示（略去）**
-Input an Integer to Choose:				在邻接矩阵上BFS
-BFSWithoutRecursion	
-Sequence:
-0 4 1 9 2 6 5 3 7 11 10 8 				BFS序
-Node  ID								编号
-  0 : 1
-  1 : 3
-  2 : 5
-  3 : 8
-  4 : 2
-  5 : 7
-  6 : 6
-  7 : 9
-  8 : 12
-  9 : 4
-  10 : 11
-  11 : 10
-
-**提示（略去）**
-Input an Integer to Choose:				在邻接表上BFS
-BFSWithoutRecursion
-Sequence:
-0 1 4 2 9 3 5 6 7 11 10 8 				BFS序
-Node  ID								编号
-  0 : 1
-  1 : 2
-  2 : 4
-  3 : 6
-  4 : 3
-  5 : 7
-  6 : 8
-  7 : 9
-  8 : 12
-  9 : 5
-  10 : 11
-  11 : 10
-
-**提示（略去）**
-Input an Integer to Choose:				退出
-
+```CPP
+************************
+ 0. Quit
+ 1. Insert
+ 2. Delete
+ 3. Get Rank
+ 4. Get Sorted Sequence 
+************************
+1
+1 
+1 
+2 
+1 
+3 
+RR
+1 
+4 
+1 
+5 
+RR
+1
+6
+RR
+1
+7
+RR
+1
+8
+1
+9
+RR
+4
+1 2 3 4 5 6 7 8 9
+2
+1
+2
+3
+RR
+3
+6
+4
+3
+8
+6
+4
+2 4 5 6 7 8 9
+0
 ```

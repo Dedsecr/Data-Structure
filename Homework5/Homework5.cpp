@@ -19,6 +19,7 @@ private:
         }
     };
     typedef Node * NodeP;
+    //获取树的高度
     int GetHeight(NodeP x)
     {
         if(x == NULL)
@@ -26,6 +27,7 @@ private:
         else
             return x->Height;
     }
+    //获取树的大小
     int GetSize(NodeP x)
     {
         if(x == NULL)
@@ -33,6 +35,7 @@ private:
         else
             return x->Size;
     }
+    //更新大小和高度
     void UpdateHS(NodeP x)
     {
         if(x == NULL)
@@ -40,6 +43,7 @@ private:
         x->Height = max(GetHeight(x->LCh), GetHeight(x->RCh)) + 1;
         x->Size = GetSize(x->LCh) + GetSize(x->RCh) + 1;
     }
+    //LL旋转
     NodeP LL(NodeP x)
     {
         NodeP Tmp = x->LCh->RCh, Res = x->LCh;
@@ -51,6 +55,7 @@ private:
 
         return Res;
     }
+    //RR旋转
     NodeP RR(NodeP x)
     {
         NodeP Tmp = x->RCh->LCh, Res = x->RCh;
@@ -62,16 +67,19 @@ private:
 
         return Res;
     }
+    //LR旋转
     NodeP LR(NodeP x)
     {
         x->LCh = RR(x->LCh);
         return LL(x);
     }
+    //RL旋转
     NodeP RL(NodeP x)
     {
         x->RCh = LL(x->RCh);
         return RR(x);
     }
+    //保持平衡
     void Maintain(NodeP &x)
     {
         if(GetHeight(x->LCh) == GetHeight(x->RCh) + 2)
@@ -93,6 +101,7 @@ private:
 public:
     
     NodeP Root;
+    //插入元素
     void Insert(NodeP &x, int Data)
     {
         if(x == NULL)
@@ -109,6 +118,7 @@ public:
             Insert(x->RCh, Data);
         Maintain(x);
     }
+    //删除元素
     int Delete(NodeP &x, int Data)
     {
         x->Size--;
@@ -127,6 +137,7 @@ public:
         Maintain(x);
         return Res;
     }
+    //获取元素的次序
     int Rank(NodeP x, int Data)
     {
         if(x == NULL)
@@ -147,20 +158,12 @@ public:
         Res += " ";
         GetSortedDFS(x->RCh, Res);
     }
+    //输出排好序的序列
     string GetSorted()
     {
         string Res;
         GetSortedDFS(Root, Res);
         return Res;
-    }
-    void DFS(NodeP x)
-    {
-        int l = -1, r = -1;
-        if(x->LCh != NULL)
-            l = x->LCh->Data, DFS(x->LCh);
-        if(x->RCh != NULL)
-            r = x->RCh->Data,DFS(x->RCh);
-        cout << x->Data << " " << l << " " << r << endl;
     }
 };
 AVL Tree;
@@ -168,16 +171,16 @@ int main()
 {
     freopen("Homework5_In.txt", "r", stdin);
     freopen("Homework5_Out.txt", "w", stdout);
+    printf("************************\n"
+           " 0. Quit                \n"
+           " 1. Insert              \n"
+           " 2. Delete              \n"
+           " 3. Get Rank            \n"
+           " 4. Get Sorted Sequence \n"
+           "************************\n");
     while(1)
     {
         int OP;
-        printf("************************\n"
-               " 0. Quit                \n"
-               " 1. Insert              \n"
-               " 2. Delete              \n"
-               " 3. Get Rank            \n"
-               " 4. Get Sorted Sequence \n"
-               "************************\n");
         cin >> OP;
         if(OP == 0)
             break;
@@ -197,20 +200,12 @@ int main()
         {
             int x;
             cin >> x;
-            Tree.Rank(Tree.Root, x);
+            cout << Tree.Rank(Tree.Root, x) << '\n';
         }
         else
         {
-            cout << Tree.GetSorted();
+            cout << Tree.GetSorted() << '\n';
         }
     }
-    /*int n;
-    cin >> n;
-    for (int i = 1; i <= n; ++i)
-    {
-        int x;
-        cin >> x;
-        Tree.Insert(Tree.Root, x);
-    }*/
     return 0;
 }
